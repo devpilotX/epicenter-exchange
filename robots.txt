@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /algo/
 
 Sitemap: https://epicenterexchange.com/sitemap.xml
