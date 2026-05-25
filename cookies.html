@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cookie Policy — Epicenter Exchange</title>
-  <meta name="description" content="Cookie policy for Epicenter Exchange. We don't set any tracking cookies.">
+  <meta name="description" content="Full list of cookies and storage Epicenter Exchange uses, including Google Analytics and AdSense, and how to control them.">
   <link rel="canonical" href="https://epicenterexchange.com/cookies.html">
+  <meta name="theme-color" content="#0B1F3A">
+  <meta name="google-adsense-account" content="ca-pub-6484525483464374">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,39 +17,79 @@
   <script defer src="/assets/js/main.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
   <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
 </div></header>
 
-<main class="prose">
+<main id="main" class="prose">
   <h1>Cookie Policy</h1>
   <p class="muted small">Last updated: 25 May 2026</p>
 
-  <div class="callout"><strong>One line:</strong> Epicenter Exchange does not set any tracking, analytics, or advertising cookies. There is no cookie banner because there is nothing to consent to.</div>
+  <div class="callout"><strong>Summary:</strong> We use Google Analytics 4 (to count anonymous visits) and Google AdSense (to fund this free site through ads). Both load only after you make a choice on the consent banner. If you click <em>Reject non-essential</em>, no advertising or analytics cookies are stored — ads are served in non-personalised mode.</div>
 
   <h2>1. What is a cookie?</h2>
-  <p>A cookie is a small text file a website stores in your browser. Sites use them for things like logins, preferences, and tracking. We don't use them at all.</p>
+  <p>A cookie is a small text file a website stores in your browser. It can remember preferences, count visits, or, in the case of advertising, help tailor ads. Some sites also use <em>localStorage</em>, which works similarly but does not expire automatically.</p>
 
-  <h2>2. What we use instead</h2>
+  <h2>2. Categories we use</h2>
+  <h3>2.1 Strictly necessary (always on)</h3>
+  <table class="cookie-table">
+    <thead><tr><th>Name</th><th>Set by</th><th>Purpose</th><th>Lifetime</th></tr></thead>
+    <tbody>
+      <tr><td><code>ee:consent:v1</code></td><td>This site (localStorage)</td><td>Remembers your consent choice so the banner doesn't reappear every page.</td><td>Persistent (until cleared)</td></tr>
+      <tr><td><code>ee:theme</code></td><td>This site (localStorage)</td><td>Stores your light / dark mode preference.</td><td>Persistent</td></tr>
+      <tr><td><code>ee:installDismissed</code></td><td>This site (localStorage)</td><td>Hides the PWA install prompt after you dismiss it.</td><td>Persistent</td></tr>
+      <tr><td>Calculator inputs</td><td>This site (localStorage)</td><td>Remembers your last calculator values across refreshes.</td><td>Persistent</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.2 Analytics (only after consent)</h3>
+  <table class="cookie-table">
+    <thead><tr><th>Name</th><th>Set by</th><th>Purpose</th><th>Lifetime</th></tr></thead>
+    <tbody>
+      <tr><td><code>_ga</code></td><td>Google Analytics 4</td><td>Distinguishes unique users (anonymised).</td><td>2 years</td></tr>
+      <tr><td><code>_ga_G-8GBZKT1BZL</code></td><td>Google Analytics 4</td><td>Persists session state for this specific property.</td><td>2 years</td></tr>
+      <tr><td><code>_gid</code></td><td>Google Analytics</td><td>Distinguishes users for 24h.</td><td>24 hours</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">IP anonymisation is enabled. We do not link analytics data to any personal identifier. When consent is denied, GA4 runs in <em>consent-mode cookieless ping</em> mode — it sends aggregated counts but does not store these cookies.</p>
+
+  <h3>2.3 Advertising (Google AdSense)</h3>
+  <table class="cookie-table">
+    <thead><tr><th>Name</th><th>Set by</th><th>Purpose</th><th>Lifetime</th></tr></thead>
+    <tbody>
+      <tr><td><code>__gads</code></td><td>Google AdSense</td><td>Measures ad performance and frequency capping.</td><td>13 months</td></tr>
+      <tr><td><code>__gpi</code></td><td>Google AdSense</td><td>Stores ad personalisation preferences.</td><td>13 months</td></tr>
+      <tr><td><code>IDE</code> / <code>NID</code></td><td>Google DoubleClick</td><td>Personalised advertising and conversion tracking. Only set when you accept personalised ads.</td><td>Up to 24 months</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">If you click <em>Reject non-essential</em>, AdSense runs in <em>non-personalised ads</em> mode and the personalised-ads cookies above are not set. Some ad frequency/fraud-prevention cookies may still be set as strictly necessary for AdSense to function.</p>
+
+  <h3>2.4 Third parties on interaction</h3>
+  <table class="cookie-table">
+    <thead><tr><th>When</th><th>Service</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Submitting the contact form</td><td>Formspree</td><td>Session cookie for spam protection.</td></tr>
+      <tr><td>Subscribing to the newsletter</td><td>Buttondown</td><td>Session cookie for the embed submit.</td></tr>
+      <tr><td>Loading fonts</td><td>Google Fonts</td><td>No cookies set (Google Fonts API does not set cookies for font requests).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. How to change or withdraw consent</h2>
   <ul>
-    <li><strong>localStorage:</strong> the calculators on <a href="/tools.html">Tools</a> remember your last-used inputs so a refresh doesn't wipe them. This data stays in your browser and is never sent anywhere. You can clear it any time from your browser's site-data settings.</li>
+    <li><strong>Re-open the banner:</strong> clear localStorage for this site (DevTools → Application → Local Storage → select <code>https://epicenterexchange.com</code> → right-click → Clear). Reload the page — the banner reappears.</li>
+    <li><strong>Disable personalised ads system-wide:</strong> visit <a href="https://www.google.com/settings/ads" rel="noopener">Google Ad Settings</a>.</li>
+    <li><strong>Opt out of Google Analytics on every site:</strong> install the <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">official GA opt-out add-on</a>.</li>
+    <li><strong>Browser controls:</strong> all modern browsers let you block third-party cookies entirely (Settings → Privacy).</li>
   </ul>
 
-  <h2>3. Third-party cookies</h2>
-  <p>Embedded third-party services may set their own cookies <em>only</em> when you actively interact with them:</p>
-  <ul>
-    <li><strong>Formspree</strong> may set a session cookie on the contact form submission. See Formspree's cookie policy.</li>
-    <li><strong>Buttondown</strong> may set a session cookie on the newsletter subscription. See Buttondown's cookie policy.</li>
-    <li><strong>CoinGecko</strong> API requests are pure JSON fetches and do not set cookies in your browser.</li>
-  </ul>
-  <p>If you do not interact with these, no third-party cookies are set on your visit.</p>
-
-  <h2>4. How to clear site data</h2>
-  <p>In Chrome / Edge: ⋮ → Settings → Privacy and security → Site Settings → View permissions and data stored across sites → search “epicenterexchange” → Clear data. Similar paths exist in Firefox and Safari.</p>
+  <h2>4. Why we monetise</h2>
+  <p>This site has no paywall, no login, no affiliate funnel, no paid tip groups. Google AdSense covers the (small) cost of the domain and the optional API server, and lets us keep every article, every calculator, and the entire backtester free forever. We never run gambling, payday-loan, or other prohibited categories of ads.</p>
 
   <h2>5. Changes</h2>
-  <p>If we ever add analytics or any consent-required tracker, this page will be updated and a banner will appear on first visit. That's a hard promise.</p>
+  <p>If we add or remove cookies, this page will be updated and the version of <code>ee:consent:v1</code> will be bumped — your previous choice will be cleared and the banner will reappear so you can review.</p>
 </main>
 
 <footer class="site-footer">
@@ -56,6 +99,6 @@
     <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
     <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
   </div>
-  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free · Not SEBI / SEC / FCA registered</div>
 </footer>
 </body></html>
