@@ -1,14 +1,60 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Services — Epicenter Exchange</title><meta name="description" content="Profile of educational services offered (information only). Contact via form for general questions."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
-<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html" class="active">Services</a><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a><a href="insights.html">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
-<section class="hero"><div class="container" style="max-width:780px"><span class="chip">Services</span><h1 class="display">What's on offer.</h1><p class="lede" style="margin-top:1rem">This page describes the educational content and free resources available here. <strong>Nothing here is an advisory service, subscription, or paid offering.</strong></p></div></section>
-<section><div class="container"><div class="grid-3">
-<div class="card"><div class="icon">E</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Educational Explainers</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">Articles on personal finance fundamentals — SIPs, taxation basics, asset allocation theory, risk concepts.</p></div>
-<div class="card"><div class="icon">A</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Open-Source Algo Demos</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">Python code for classic strategies (SMA, RSI, MACD, mean-reversion) with transparent backtests. For learning, not trading.</p></div>
-<div class="card"><div class="icon">C</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Free Calculators</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">SIP, EMI, retirement corpus, and risk-profile tools. Browser-only, no signup, no data collected.</p></div>
-<div class="card"><div class="icon">M</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Market Snapshots</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">Daily indices and top movers across India, US, UK, and crypto, refreshed via free public APIs.</p></div>
-<div class="card"><div class="icon">G</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Beginner Guides</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">Step-by-step explainers for first-time investors — KYC, account types, jargon, common mistakes.</p></div>
-<div class="card"><div class="icon">Q</div><h3 class="display" style="font-size:1.2rem;color:var(--navy)">Q&amp;A via Contact</h3><p style="color:var(--muted);font-size:.95rem;line-height:1.6">General questions answered when time permits. Not personalised advice — best-effort, no SLA.</p></div>
-</div><div class="callout" style="margin-top:3rem"><strong>No customer support team.</strong> This site is run by one person. Please don't expect 24/7 replies or formal SLAs. Use the contact form for general questions only.</div></div></section>
-<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
-<script src="assets/js/main.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Services — Epicenter Exchange</title>
+  <meta name="description" content="Everything Epicenter Exchange offers — all free, all educational. Articles, calculators, open-source signal demos, market briefings, and contact-only support.">
+  <link rel="canonical" href="https://epicenterexchange.com/services.html">
+  <meta property="og:title" content="Services — Epicenter Exchange">
+  <meta property="og:description" content="All free, all educational. Articles, calculators, open-source signal demos.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://epicenterexchange.com/services.html">
+  <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="row">
+  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+</div></header>
+
+<main>
+  <section class="hero hero-narrow">
+    <div class="container">
+      <span class="chip">Services</span>
+      <h1>What's on offer here — all free.</h1>
+      <p class="lede">Six things, six clear scopes. No paid tier, no upsell, no “premium” version. If it requires a login or a payment, it isn't here.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container" style="max-width:880px">
+      <div class="service-row"><div class="icon">A</div><div><h3>Long-form essays</h3><p>One slow, data-grounded article every fortnight on India, US, UK, or crypto markets.</p></div><a class="btn btn-outline" href="/insights.html">Read →</a></div>
+      <div class="service-row"><div class="icon">B</div><div><h3>Working calculators</h3><p>SIP, EMI, and retirement planners with money-weighted math. Inputs save locally in your browser.</p></div><a class="btn btn-outline" href="/tools.html">Try →</a></div>
+      <div class="service-row"><div class="icon">C</div><div><h3>Open-source signal demos</h3><p>SMA, RSI, MACD, mean-reversion, momentum — in Python, MIT-licensed, with an honest backtester.</p></div><a class="btn btn-outline" href="/signals.html">Explore →</a></div>
+      <div class="service-row"><div class="icon">D</div><div><h3>Market briefings</h3><p>Educational summaries of NIFTY, S&amp;P 500, FTSE, and major crypto — with context, not calls.</p></div><a class="btn btn-outline" href="/markets.html">View →</a></div>
+      <div class="service-row"><div class="icon">E</div><div><h3>Newsletter</h3><p>One essay every fortnight, straight to your inbox. No tracking. Unsubscribe in one click.</p></div><a class="btn btn-outline" href="/insights.html#newsletter">Subscribe →</a></div>
+      <div class="service-row"><div class="icon">F</div><div><h3>Contact form</h3><p>One channel for everything: corrections, questions, collaboration. Replies in a few days.</p></div><a class="btn btn-primary" href="/contact.html">Write →</a></div>
+
+      <div class="callout mt-12"><strong>What we don't offer:</strong> investment advice, buy/sell tips, paid signals, mentorship programmes, broker referrals, or one-on-one consultations. See <a href="/about.html#what-we-dont-do">about page</a> for the full list.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div><div class="footer-brand">Epicenter <span>Exchange</span></div><p class="small">Markets, math, and decisions — without the hype. Educational platform. Not investment advice.</p></div>
+    <div><h4>Explore</h4><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a></div>
+    <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
+    <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
+  </div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+</footer>
+</body></html>

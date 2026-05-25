@@ -1,18 +1,72 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Contact — Epicenter Exchange</title><meta name="description" content="Reach out via this contact form. The only way to interact with this site."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
-<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html">Services</a><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a><a href="insights.html">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
-<section class="hero"><div class="container" style="max-width:680px"><span class="chip">Contact</span><h1 class="display">One form. No support team.</h1><p class="lede" style="margin-top:1rem">This is the only way to interact with the site. Best-effort replies, general questions only — never personalised advice.</p></div></section>
-<section><div class="container" style="max-width:680px">
-<!-- Replace YOUR_FORMSPREE_ID with a free Formspree endpoint, or change action to a mailto: link -->
-<form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" class="card">
-<div class="field"><label>Your name</label><input name="name" required/></div>
-<div class="field"><label>Your email</label><input type="email" name="email" required/></div>
-<div class="field"><label>Topic</label><select name="topic"><option>General question</option><option>Algo / code question</option><option>Article suggestion</option><option>Bug report</option><option>Other</option></select></div>
-<div class="field"><label>Message</label><textarea name="message" rows="6" required></textarea></div>
-<div class="field"><label style="display:flex;gap:.5rem;font-size:.85rem;color:var(--muted)"><input type="checkbox" required/> I understand this site does not provide investment advice and I will not share personal financial details.</label></div>
-<button class="btn btn-primary" type="submit">Send message</button>
-</form>
-<div class="callout" style="margin-top:2rem"><strong>Setup note:</strong> Replace <code>YOUR_FORMSPREE_ID</code> in this file with a free Formspree (formspree.io) endpoint, or change the form action to <code>mailto:you@yourdomain.com</code> for a no-backend option.</div>
-</div></section>
-<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
-<script src="assets/js/main.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — Epicenter Exchange</title>
+  <meta name="description" content="One channel: the contact form. Corrections, questions, collaboration — we read everything, reply within a few days. No phone support, no chat.">
+  <link rel="canonical" href="https://epicenterexchange.com/contact.html">
+  <meta property="og:title" content="Contact — Epicenter Exchange">
+  <meta property="og:description" content="One channel: the contact form.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://epicenterexchange.com/contact.html">
+  <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="row">
+  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+</div></header>
+
+<main>
+  <section class="hero hero-narrow">
+    <div class="container">
+      <span class="chip">Contact</span>
+      <h1>Write to us.</h1>
+      <p class="lede">This is the only way to reach the site. There is no phone line, no live chat, no DMs. We read everything and reply within a few days when we can.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container" style="max-width:760px">
+      <div class="calc-form">
+        <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+          <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" type="text" required></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required></div>
+          <div class="field"><label for="c-topic">Topic</label>
+            <select id="c-topic" name="topic" required>
+              <option value="">Pick one…</option>
+              <option>Correction or feedback on an article</option>
+              <option>Question about a calculator or algo</option>
+              <option>Bug report</option>
+              <option>Collaboration (writing, code, design)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" rows="6" required></textarea></div>
+          <div class="callout small"><strong>Please don't ask for stock tips, target prices, or whether to buy X.</strong> We can't and won't answer those. See <a href="/disclaimer.html">disclaimer</a>.</div>
+          <button class="btn btn-primary" type="submit" style="margin-top:8px">Send message</button>
+        </form>
+      </div>
+      <p class="muted small mt-8" style="text-align:center">Your message is sent via Formspree. See our <a href="/privacy.html">privacy policy</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div><div class="footer-brand">Epicenter <span>Exchange</span></div><p class="small">Markets, math, and decisions — without the hype. Educational platform. Not investment advice.</p></div>
+    <div><h4>Explore</h4><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a></div>
+    <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
+    <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
+  </div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+</footer>
+</body></html>
