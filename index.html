@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Epicenter Exchange — Markets, Math, Decisions</title>
-  <meta name="description" content="A free, ad-free educational platform for Indian, US, UK, and crypto markets. Slow essays, working calculators, open-source signal demos. No paid tips.">
+  <title>Epicenter Exchange — Free Markets, Math &amp; Backtesting Platform</title>
+  <meta name="description" content="Free, ad-free platform for India, US, UK &amp; crypto markets. Live crypto dashboard, in-browser backtester, SIP / EMI / tax / FX calculators, slow essays. No login, no tips.">
   <link rel="canonical" href="https://epicenterexchange.com/">
   <meta property="og:title" content="Epicenter Exchange — Markets, Math, Decisions">
-  <meta property="og:description" content="Free educational platform for Indian, US, UK, and crypto markets. No hype, no paid tips.">
+  <meta property="og:description" content="Free platform for India, US, UK &amp; crypto. Live crypto, backtester, calculators, essays.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://epicenterexchange.com/">
   <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0B1F3A">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="Epicenter Insights" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,11 +23,14 @@
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/ticker.js"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Epicenter Exchange","url":"https://epicenterexchange.com","logo":"https://epicenterexchange.com/assets/img/logo-mark.svg","description":"Free educational platform for Indian, US, UK and crypto market literacy.","sameAs":["https://github.com/devpilotX/epicenter-exchange"]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Epicenter Exchange","url":"https://epicenterexchange.com","publisher":{"@type":"Organization","name":"Epicenter Exchange"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Epicenter Exchange","url":"https://epicenterexchange.com","potentialAction":{"@type":"SearchAction","target":"https://epicenterexchange.com/insights.html?q={search_term_string}","query-input":"required name=search_term_string"},"publisher":{"@type":"Organization","name":"Epicenter Exchange"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Epicenter Exchange free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Everything on Epicenter Exchange — articles, calculators, live crypto data, the in-browser backtester, and the open-source signal code — is free. There is no login, no paywall, no advertising, and no affiliate funnel."}},{"@type":"Question","name":"Do you give stock tips or buy/sell signals?","acceptedAnswer":{"@type":"Answer","text":"No. We never provide tips, calls, or personalised recommendations. We publish educational essays, working calculators, and open-source backtests so you can learn how markets and signals actually work."}},{"@type":"Question","name":"Which markets do you cover?","acceptedAnswer":{"@type":"Answer","text":"India (NIFTY, Sensex, individual NSE stocks), United States (S&P 500, NASDAQ, large-caps), United Kingdom (FTSE 100, FTSE 250), and crypto (BTC, ETH, SOL, and other majors via CoinGecko)."}},{"@type":"Question","name":"Are you SEBI / SEC / FCA registered?","acceptedAnswer":{"@type":"Answer","text":"No. Epicenter Exchange is an educational platform. We are not a registered investment adviser, broker, or research analyst in India, the US, the UK, or anywhere else. Nothing on the site is investment advice."}},{"@type":"Question","name":"Can I use the backtester for live trading?","acceptedAnswer":{"@type":"Answer","text":"No. The backtester is educational. Real markets add slippage, taxes, latency, and emotional pressure. Past results never guarantee future returns."}},{"@type":"Question","name":"Where does the crypto data come from?","acceptedAnswer":{"@type":"Answer","text":"CoinGecko's free public API. No API key is required. Data refreshes roughly every 60 seconds."}}]}</script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
   <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <nav class="site-nav" id="site-nav">
     <a href="/about.html">About</a>
     <a href="/services.html">Services</a>
@@ -36,22 +42,22 @@
   </nav>
 </div></header>
 
-<main>
+<main id="main">
   <section class="hero">
     <div class="container hero-grid">
       <div>
         <span class="chip">Educational · Not investment advice</span>
         <h1 style="margin-top:18px">Markets, math, and <em>decisions</em> — without the hype.</h1>
-        <p class="lede">A free, ad-free platform for slow, honest writing on Indian, US, UK, and crypto markets. Working calculators. Open-source signal demos. No paid tips, ever.</p>
+        <p class="lede">A free, ad-free platform for India, US, UK, and crypto markets. Live crypto dashboard. In-browser backtester. Working calculators. Open-source code. No tips, ever.</p>
         <div class="hero-cta">
           <a href="/insights.html" class="btn btn-primary">Read insights</a>
-          <a href="/tools.html" class="btn btn-outline">Try the calculators</a>
+          <a href="/signals.html" class="btn btn-outline">Try the backtester</a>
         </div>
       </div>
       <aside class="hero-side">
         <h3>Live crypto snapshot</h3>
         <div class="quotes" id="hero-quotes"></div>
-        <p class="small muted" style="margin:16px 0 0">Data: CoinGecko · 24h change. Not a recommendation.</p>
+        <p class="small muted" style="margin:16px 0 0">Data: CoinGecko · 24h change · <a href="/markets.html">Full dashboard →</a></p>
       </aside>
     </div>
   </section>
@@ -67,8 +73,8 @@
       </div>
       <div class="grid grid-3">
         <article class="card"><div class="icon">01</div><h3>Slow, data-grounded essays</h3><p>Every article is built around real numbers — 25 years of NIFTY, four BTC halvings, EPF/PPF math — not opinions dressed as analysis.</p></article>
-        <article class="card"><div class="icon">02</div><h3>Tools that actually compute</h3><p>SIP, EMI, and retirement calculators that use proper money-weighted math. No login. No upsells.</p></article>
-        <article class="card"><div class="icon">03</div><h3>Open-source signal demos</h3><p>SMA, RSI, MACD, mean-reversion, momentum — all in Python, MIT-licensed, with an honest backtester.</p></article>
+        <article class="card"><div class="icon">02</div><h3>Tools that actually compute</h3><p>SIP, step-up SIP, EMI, retirement, India tax, and live FX. Money-weighted math. No login. No upsells.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Open-source backtester</h3><p>SMA, RSI, MACD strategies on crypto and equities — runs in your browser, locally. Python source on GitHub.</p></article>
       </div>
     </div>
   </section>
@@ -105,9 +111,24 @@
     <div class="container">
       <div class="stats">
         <div><div class="num">4</div><div class="lbl">Markets covered</div></div>
+        <div><div class="num">6</div><div class="lbl">Working calculators</div></div>
         <div><div class="num">100%</div><div class="lbl">Free, no ads, no logins</div></div>
         <div><div class="num">MIT</div><div class="lbl">All code open-source</div></div>
       </div>
+    </div>
+  </section>
+
+  <section class="surface">
+    <div class="container">
+      <div class="section-head">
+        <span class="chip">FAQ</span>
+        <h2>Common questions</h2>
+      </div>
+      <details class="faq"><summary>Is everything really free?</summary><p>Yes. No login, no paywall, no advertising. The hosting cost runs on a free GitHub Pages tier and the data comes from free public APIs (CoinGecko, Stooq, exchangerate.host).</p></details>
+      <details class="faq"><summary>Do you give buy / sell signals or stock tips?</summary><p>Never. We publish educational essays, math-grounded calculators, and an open-source backtester so you can learn how markets and trading signals actually work. We don't tell you what to buy.</p></details>
+      <details class="faq"><summary>Are you SEBI / SEC / FCA registered?</summary><p>No. Epicenter Exchange is an educational platform, not a registered investment adviser, broker, or research analyst. Nothing on the site is investment advice. For personalised advice, consult a SEBI-registered RIA (India) or the equivalent regulated adviser in your country.</p></details>
+      <details class="faq"><summary>Can I use the backtester for real trading?</summary><p>No. The backtester is for learning how a signal is computed, not for live trading. Real markets add slippage, taxes, latency, and emotional pressure. Past results never guarantee future returns.</p></details>
+      <details class="faq"><summary>Where does the crypto data come from?</summary><p>CoinGecko's free public API. No API key required. Refreshes roughly every 60 seconds. For trading you should always use your exchange's own data feed.</p></details>
     </div>
   </section>
 
