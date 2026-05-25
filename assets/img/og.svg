@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1F3A"/>
+      <stop offset="100%" stop-color="#13315C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g transform="translate(120,200)">
+    <rect width="88" height="88" rx="16" fill="#C9A227"/>
+    <path d="M22 66 L40 38 L52 52 L72 24" stroke="#0B1F3A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="72" cy="24" r="5" fill="#0B1F3A"/>
+    <text x="120" y="54" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="#ffffff">Epicenter Exchange</text>
+    <text x="120" y="104" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#C9A227" letter-spacing="6">MARKETS · MATH · DECISIONS</text>
+  </g>
+  <text x="120" y="560" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.55)">epicenterexchange.com — free, educational, no advertising</text>
+</svg>
