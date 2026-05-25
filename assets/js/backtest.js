@@ -1,170 +1,153 @@
-/* Epicenter Exchange — in-browser backtester v3.
-   - Crypto via CoinGecko (open CORS)
-   - Equities/indices via Stooq through CORS proxies (Stooq sends no CORS header)
-   - 15+ quant metrics: CAGR, Sharpe, Sortino, Calmar, Info Ratio, Beta, Alpha,
-     Volatility, Max DD + duration, Win-rate, Profit factor, streaks, VaR 95%, etc.
-   - Long-only, daily bars, lag-1 to avoid look-ahead. */
+/* Epicenter Exchange — in-browser backtester v4.
+   Crypto: CoinGecko (free, no key).
+   Equity / indices: Yahoo Finance v8 chart API via CORS proxy (no key, fast, current + historical in one call).
+   4 strategies (SMA, RSI, MACD, Bollinger). 25+ quant metrics. Long-only, lag-1 (no look-ahead). */
 (function(){
   'use strict';
-  var host=document.getElementById('backtest-app');
-  if(!host)return;
+  var mount=document.getElementById('backtest-app');if(!mount)return;
 
-  var CORS_PROXIES=[
-    function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);},
-    function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
-    function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}
-  ];
-  function fetchWithProxy(url){
-    var i=0;
-    function attempt(){
-      if(i>=CORS_PROXIES.length)return Promise.reject(new Error('all proxies failed'));
-      var p=CORS_PROXIES[i++](url);
-      return fetch(p).then(function(r){if(!r.ok)throw new Error('proxy '+(i-1)+' '+r.status);return r.text();}).catch(function(){return attempt();});
-    }
-    return attempt();
-  }
-
-  var TICKERS={
-    'Crypto':[['bitcoin','Bitcoin'],['ethereum','Ethereum'],['solana','Solana'],['cardano','Cardano'],['ripple','XRP'],['dogecoin','Dogecoin'],['polkadot','Polkadot'],['avalanche-2','Avalanche'],['chainlink','Chainlink'],['matic-network','Polygon'],['litecoin','Litecoin'],['binancecoin','BNB'],['tron','TRON'],['stellar','Stellar'],['monero','Monero']],
-    'US indices':[['^spx','S&P 500'],['^ndx','NASDAQ 100'],['^dji','Dow Jones'],['^rut','Russell 2000']],
-    'US stocks':[['aapl.us','Apple'],['msft.us','Microsoft'],['googl.us','Alphabet'],['amzn.us','Amazon'],['nvda.us','NVIDIA'],['meta.us','Meta'],['tsla.us','Tesla'],['jpm.us','JPMorgan'],['v.us','Visa'],['jnj.us','J&J'],['wmt.us','Walmart'],['pg.us','P&G'],['brk-b.us','Berkshire B'],['ko.us','Coca-Cola'],['dis.us','Disney']],
-    'India indices':[['^nse','NIFTY 50'],['^bsx','BSE Sensex']],
-    'India stocks':[['reliance.in','Reliance'],['tcs.in','TCS'],['infy.in','Infosys'],['hdfcbank.in','HDFC Bank'],['icicibank.in','ICICI Bank'],['hindunilvr.in','HUL'],['itc.in','ITC'],['sbin.in','SBI'],['bhartiartl.in','Bharti Airtel'],['kotakbank.in','Kotak Bank'],['lt.in','L&T'],['asianpaint.in','Asian Paints'],['axisbank.in','Axis Bank'],['maruti.in','Maruti'],['ongc.in','ONGC']],
-    'UK':[['^ftm','FTSE 100'],['^ftmc','FTSE 250'],['hsba.uk','HSBC'],['bp.uk','BP'],['gsk.uk','GSK'],['azn.uk','AstraZeneca'],['ulvr.uk','Unilever'],['shel.uk','Shell'],['vod.uk','Vodafone']],
-    'Global':[['^dax','DAX'],['^cac','CAC 40'],['^n225','Nikkei 225'],['^hsi','Hang Seng']]
+  // Asset universe — grouped for the UI
+  var ASSETS={
+    'Crypto':{type:'crypto',items:[['bitcoin','Bitcoin (BTC)'],['ethereum','Ethereum (ETH)'],['solana','Solana (SOL)'],['ripple','XRP'],['binancecoin','BNB'],['cardano','Cardano (ADA)'],['dogecoin','Dogecoin'],['polkadot','Polkadot'],['avalanche-2','Avalanche'],['chainlink','Chainlink'],['matic-network','Polygon'],['litecoin','Litecoin'],['tron','TRON'],['stellar','Stellar'],['monero','Monero']]},
+    'US indices':{type:'equity',items:[['^GSPC','S&P 500'],['^NDX','NASDAQ 100'],['^DJI','Dow Jones'],['^RUT','Russell 2000']]},
+    'US stocks':{type:'equity',items:[['AAPL','Apple'],['MSFT','Microsoft'],['NVDA','NVIDIA'],['GOOGL','Alphabet'],['AMZN','Amazon'],['META','Meta'],['TSLA','Tesla'],['JPM','JPMorgan'],['V','Visa'],['JNJ','Johnson & Johnson'],['WMT','Walmart'],['BRK-B','Berkshire B'],['KO','Coca-Cola'],['DIS','Disney'],['NFLX','Netflix']]},
+    'India indices':{type:'equity',items:[['^NSEI','NIFTY 50'],['^BSESN','BSE Sensex'],['^NSEBANK','Bank Nifty']]},
+    'India stocks':{type:'equity',items:[['RELIANCE.NS','Reliance'],['TCS.NS','TCS'],['HDFCBANK.NS','HDFC Bank'],['INFY.NS','Infosys'],['ICICIBANK.NS','ICICI Bank'],['HINDUNILVR.NS','HUL'],['ITC.NS','ITC'],['SBIN.NS','SBI'],['BHARTIARTL.NS','Bharti Airtel'],['KOTAKBANK.NS','Kotak Bank'],['LT.NS','Larsen & Toubro'],['ASIANPAINT.NS','Asian Paints'],['AXISBANK.NS','Axis Bank'],['MARUTI.NS','Maruti'],['ONGC.NS','ONGC']]},
+    'UK & Europe':{type:'equity',items:[['^FTSE','FTSE 100'],['^FTMC','FTSE 250'],['HSBA.L','HSBC'],['BP.L','BP'],['GSK.L','GSK'],['AZN.L','AstraZeneca'],['ULVR.L','Unilever'],['SHEL.L','Shell'],['VOD.L','Vodafone'],['^GDAXI','DAX'],['^FCHI','CAC 40']]},
+    'Asia':{type:'equity',items:[['^N225','Nikkei 225'],['^HSI','Hang Seng'],['000001.SS','Shanghai Comp'],['^KS11','KOSPI']]}
   };
-  function isCryptoId(id){return TICKERS['Crypto'].some(function(p){return p[0]===id;});}
 
+  var STRATS=[['sma','SMA 50/200 crossover'],['rsi','RSI(14) mean-reversion'],['macd','MACD(12,26,9)'],['bb','Bollinger reversion (20,2)']];
+
+  var PROXIES=[function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);},function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}];
+  function fetchProxied(url){var i=0;return new Promise(function(res,rej){(function tr(){if(i>=PROXIES.length)return rej(new Error('proxies'));fetch(PROXIES[i++](url)).then(function(r){if(!r.ok)throw 0;return r.json();}).then(res).catch(tr);})();});}
+
+  // ---------- UI ----------
+  function buildUI(){
+    var groupOpts=Object.keys(ASSETS).map(function(g){return '<optgroup label="'+g+'">'+ASSETS[g].items.map(function(it){return '<option value="'+g+'::'+it[0]+'">'+it[1]+'</option>';}).join('')+'</optgroup>';}).join('');
+    mount.innerHTML='<div class="calc-form">\
+<div class="grid grid-2">\
+<div class="field"><label>Asset</label><select id="bt-asset">'+groupOpts+'</select></div>\
+<div class="field"><label>Strategy</label><select id="bt-strat">'+STRATS.map(function(s){return '<option value="'+s[0]+'">'+s[1]+'</option>';}).join('')+'</select></div>\
+<div class="field"><label>Lookback (years)</label><select id="bt-yrs"><option value="1">1</option><option value="3">3</option><option value="5" selected>5</option><option value="10">10</option><option value="max">Max</option></select></div>\
+<div class="field" style="align-self:end"><button class="btn btn-primary" id="bt-run" type="button">Run backtest</button></div>\
+</div>\
+<div id="bt-status" class="small muted" aria-live="polite" style="min-height:1.4em;margin-top:8px"></div>\
+<div id="bt-out"></div>\
+</div>';
+    document.getElementById('bt-run').addEventListener('click',run);
+  }
+  buildUI();
+
+  function status(t,c){var el=document.getElementById('bt-status');el.textContent=t;el.style.color=c||'';}
+
+  // ---------- Data fetch ----------
   function fetchCrypto(id,days){
     var url='https://api.coingecko.com/api/v3/coins/'+id+'/market_chart?vs_currency=usd&days='+days+'&interval=daily';
-    return fetch(url).then(function(r){if(!r.ok)throw new Error('coingecko '+r.status);return r.json();}).then(function(d){return (d.prices||[]).map(function(p){return{t:p[0],c:p[1]};});});
+    return fetch(url).then(function(r){if(!r.ok)throw new Error('CoinGecko '+r.status);return r.json();}).then(function(j){return j.prices.map(function(p){return {t:p[0],c:p[1]};});});
   }
-  function fetchEquity(ticker){
-    var url='https://stooq.com/q/d/l/?s='+encodeURIComponent(ticker)+'&i=d';
-    return fetchWithProxy(url).then(function(csv){
-      var lines=(csv||'').trim().split(/\r?\n/),out=[];
-      for(var i=1;i<lines.length;i++){var p=lines[i].split(',');if(p.length<5)continue;var t=new Date(p[0]).getTime();var c=parseFloat(p[4]);if(isFinite(t)&&isFinite(c))out.push({t:t,c:c});}
-      return out;
+  function fetchEquity(symbol,years){
+    var range=years==='max'?'max':(years+'y');
+    var url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range='+range+'&interval=1d&includePrePost=false';
+    return fetchProxied(url).then(function(j){
+      var r=j&&j.chart&&j.chart.result&&j.chart.result[0];if(!r)throw new Error('No data for '+symbol);
+      var ts=r.timestamp||[];var cl=(r.indicators&&r.indicators.quote&&r.indicators.quote[0]&&r.indicators.quote[0].close)||[];var ad=(r.indicators&&r.indicators.adjclose&&r.indicators.adjclose[0]&&r.indicators.adjclose[0].adjclose)||cl;
+      var out=[];for(var i=0;i<ts.length;i++){var p=ad[i]!=null?ad[i]:cl[i];if(p!=null&&isFinite(p))out.push({t:ts[i]*1000,c:p});}
+      if(!out.length)throw new Error('No prices for '+symbol);return out;
     });
   }
 
-  function sma(a,n){var o=new Array(a.length).fill(null),s=0;for(var i=0;i<a.length;i++){s+=a[i];if(i>=n)s-=a[i-n];if(i>=n-1)o[i]=s/n;}return o;}
-  function rsi(a,n){var o=new Array(a.length).fill(null),g=0,l=0;for(var i=1;i<a.length;i++){var d=a[i]-a[i-1],gg=Math.max(d,0),ll=Math.max(-d,0);if(i<=n){g+=gg;l+=ll;if(i===n){g/=n;l/=n;var rs=l===0?100:g/l;o[i]=100-100/(1+rs);}}else{g=(g*(n-1)+gg)/n;l=(l*(n-1)+ll)/n;var rs2=l===0?100:g/l;o[i]=100-100/(1+rs2);}}return o;}
-  function ema(a,n){var o=new Array(a.length).fill(null),k=2/(n+1),p=null;for(var i=0;i<a.length;i++){if(a[i]==null)continue;p=p==null?a[i]:a[i]*k+p*(1-k);o[i]=p;}return o;}
-  function macdSig(c){var e12=ema(c,12),e26=ema(c,26);var m=c.map(function(_,i){return e12[i]!=null&&e26[i]!=null?e12[i]-e26[i]:null;});var s=ema(m.map(function(v){return v==null?0:v;}),9);return {m:m,s:s};}
-  function boll(c,n,k){var m=sma(c,n),b=[];for(var i=0;i<c.length;i++){if(m[i]==null){b.push({u:null,l:null});continue;}var s=0;for(var j=i-n+1;j<=i;j++)s+=(c[j]-m[i])*(c[j]-m[i]);var sd=Math.sqrt(s/n);b.push({u:m[i]+k*sd,l:m[i]-k*sd});}return b;}
+  // ---------- Indicators ----------
+  function sma(arr,n){var out=new Array(arr.length).fill(null),s=0;for(var i=0;i<arr.length;i++){s+=arr[i];if(i>=n)s-=arr[i-n];if(i>=n-1)out[i]=s/n;}return out;}
+  function ema(arr,n){var out=new Array(arr.length).fill(null),k=2/(n+1),prev=null;for(var i=0;i<arr.length;i++){if(prev===null){if(i>=n-1){var s=0;for(var j=i-n+1;j<=i;j++)s+=arr[j];prev=s/n;out[i]=prev;}}else{prev=arr[i]*k+prev*(1-k);out[i]=prev;}}return out;}
+  function rsi(arr,n){var out=new Array(arr.length).fill(null),g=0,l=0;for(var i=1;i<arr.length;i++){var d=arr[i]-arr[i-1];var u=Math.max(d,0),v=Math.max(-d,0);if(i<=n){g+=u;l+=v;if(i===n){g/=n;l/=n;out[i]=l===0?100:100-100/(1+g/l);}}else{g=(g*(n-1)+u)/n;l=(l*(n-1)+v)/n;out[i]=l===0?100:100-100/(1+g/l);}}return out;}
+  function macd(arr){var e12=ema(arr,12),e26=ema(arr,26),m=arr.map(function(_,i){return (e12[i]!=null&&e26[i]!=null)?e12[i]-e26[i]:null;});var sig=ema(m.map(function(v){return v||0;}),9);return {macd:m,signal:sig};}
+  function bbands(arr,n,k){var m=sma(arr,n),up=new Array(arr.length).fill(null),lo=new Array(arr.length).fill(null);for(var i=n-1;i<arr.length;i++){var s=0;for(var j=i-n+1;j<=i;j++)s+=Math.pow(arr[j]-m[i],2);var sd=Math.sqrt(s/n);up[i]=m[i]+k*sd;lo[i]=m[i]-k*sd;}return {mid:m,up:up,lo:lo};}
 
-  function sigSMA(c){var f=sma(c,50),s=sma(c,200);return c.map(function(_,i){return f[i]!=null&&s[i]!=null?(f[i]>s[i]?1:0):0;});}
-  function sigRSI(c){var r=rsi(c,14),p=0;return c.map(function(_,i){var v=r[i];if(v==null)return 0;if(v<30)p=1;else if(v>70)p=0;return p;});}
-  function sigMACD(c){var x=macdSig(c);return c.map(function(_,i){return x.m[i]!=null&&x.s[i]!=null?(x.m[i]>x.s[i]?1:0):0;});}
-  function sigBoll(c){var b=boll(c,20,2),p=0;return c.map(function(v,i){var bb=b[i];if(!bb||bb.l==null)return 0;if(v<bb.l)p=1;else if(v>bb.u)p=0;return p;});}
+  // ---------- Signals (long-only, lag-1) ----------
+  function buildSignal(prices,strat){
+    var n=prices.length,p=prices.map(function(x){return x.c;});
+    var raw=new Array(n).fill(0);
+    if(strat==='sma'){var s50=sma(p,50),s200=sma(p,200);for(var i=0;i<n;i++)raw[i]=(s50[i]!=null&&s200[i]!=null&&s50[i]>s200[i])?1:0;}
+    else if(strat==='rsi'){var r=rsi(p,14);var st=0;for(var i=0;i<n;i++){if(r[i]==null){raw[i]=0;continue;}if(r[i]<30)st=1;else if(r[i]>70)st=0;raw[i]=st;}}
+    else if(strat==='macd'){var m=macd(p);for(var i=0;i<n;i++)raw[i]=(m.macd[i]!=null&&m.signal[i]!=null&&m.macd[i]>m.signal[i])?1:0;}
+    else if(strat==='bb'){var b=bbands(p,20,2);var st=0;for(var i=0;i<n;i++){if(b.lo[i]==null){raw[i]=0;continue;}if(p[i]<b.lo[i])st=1;else if(p[i]>b.mid[i])st=0;raw[i]=st;}}
+    // lag by one bar to avoid look-ahead
+    var sig=new Array(n).fill(0);for(var i=1;i<n;i++)sig[i]=raw[i-1];
+    return sig;
+  }
 
-  function runBacktest(series,strategy){
-    var c=series.map(function(d){return d.c;});
-    var sig=strategy==='sma'?sigSMA(c):strategy==='rsi'?sigRSI(c):strategy==='macd'?sigMACD(c):sigBoll(c);
-    var lag=[0].concat(sig.slice(0,-1));
-    var eq=[1],bh=[1];
-    for(var i=1;i<c.length;i++){var r=(c[i]/c[i-1])-1;eq.push(eq[i-1]*(1+(lag[i]*r)));bh.push(bh[i-1]*(1+r));}
-    var yrs=(series[series.length-1].t-series[0].t)/(365.25*86400*1000);
-    var tr=eq[eq.length-1]-1,bhr=bh[bh.length-1]-1;
-    var cagr=Math.pow(1+tr,1/Math.max(yrs,0.01))-1;
-    var bhCagr=Math.pow(1+bhr,1/Math.max(yrs,0.01))-1;
-    var rs=[],brs=[];for(var j=1;j<eq.length;j++){rs.push(eq[j]/eq[j-1]-1);brs.push(bh[j]/bh[j-1]-1);}
-    var mean=rs.reduce(function(a,b){return a+b;},0)/rs.length;
-    var bMean=brs.reduce(function(a,b){return a+b;},0)/brs.length;
-    var sd=Math.sqrt(rs.reduce(function(a,b){return a+(b-mean)*(b-mean);},0)/rs.length);
-    var sharpe=sd>0?(mean/sd)*Math.sqrt(252):0;
-    var down=rs.filter(function(x){return x<0;});
-    var dsd=down.length?Math.sqrt(down.reduce(function(a,b){return a+b*b;},0)/down.length):0;
-    var sortino=dsd>0?(mean/dsd)*Math.sqrt(252):0;
-    var peak=eq[0],mdd=0,curDur=0,ddDur=0;
-    for(var k=0;k<eq.length;k++){if(eq[k]>=peak){peak=eq[k];curDur=0;}else{curDur++;ddDur=Math.max(ddDur,curDur);}var dd=(eq[k]-peak)/peak;if(dd<mdd)mdd=dd;}
-    var calmar=Math.abs(mdd)>0.001?cagr/Math.abs(mdd):0;
-    var volAnn=sd*Math.sqrt(252);
-    var cov=0,vb=0;for(var m=0;m<rs.length;m++){cov+=(rs[m]-mean)*(brs[m]-bMean);vb+=(brs[m]-bMean)*(brs[m]-bMean);}cov/=rs.length;vb/=rs.length;
-    var beta=vb>0?cov/vb:0,alpha=(mean-beta*bMean)*252;
-    var ex=rs.map(function(v,idx){return v-brs[idx];});
-    var em=ex.reduce(function(a,b){return a+b;},0)/ex.length;
-    var es=Math.sqrt(ex.reduce(function(a,b){return a+(b-em)*(b-em);},0)/ex.length);
-    var ir=es>0?(em/es)*Math.sqrt(252):0;
-    var sorted=rs.slice().sort(function(a,b){return a-b;});
-    var var95=sorted[Math.floor(sorted.length*0.05)]||0;
-    var daysLong=lag.filter(function(x){return x===1;}).length;
-    var pctInv=daysLong/lag.length;
-    var trades=[],entry=null;
-    for(var t=1;t<lag.length;t++){
-      if(lag[t]===1&&lag[t-1]===0)entry={i:t,p:c[t]};
-      else if(lag[t]===0&&lag[t-1]===1&&entry){trades.push({pl:(c[t]/entry.p)-1,d:t-entry.i});entry=null;}
+  // ---------- Quant metrics ----------
+  function backtest(prices,sig){
+    var n=prices.length,rets=new Array(n).fill(0),bh=new Array(n).fill(0),eq=1,bhEq=1,eqArr=[1],bhArr=[1];
+    var trades=0,longDays=0,wins=[],losses=[];
+    var inPos=false,entry=0;
+    for(var i=1;i<n;i++){
+      var r=prices[i].c/prices[i-1].c-1;bh[i]=r;
+      var posRet=sig[i]*r;rets[i]=posRet;
+      eq*=(1+posRet);bhEq*=(1+r);eqArr.push(eq);bhArr.push(bhEq);
+      if(sig[i]===1)longDays++;
+      if(!inPos&&sig[i]===1){inPos=true;entry=prices[i].c;trades++;}
+      else if(inPos&&sig[i]===0){var tr=prices[i].c/entry-1;if(tr>0)wins.push(tr);else losses.push(tr);inPos=false;}
     }
-    if(entry)trades.push({pl:(c[c.length-1]/entry.p)-1,d:c.length-1-entry.i,open:true});
-    var wins=trades.filter(function(x){return x.pl>0;});
-    var losses=trades.filter(function(x){return x.pl<=0;});
-    var wr=trades.length?wins.length/trades.length:0;
-    var aw=wins.length?wins.reduce(function(a,b){return a+b.pl;},0)/wins.length:0;
-    var al=losses.length?losses.reduce(function(a,b){return a+b.pl;},0)/losses.length:0;
-    var pf=al<0?Math.abs((aw*wins.length)/(al*losses.length)):0;
-    var lw=0,ll=0,cw=0,cl=0;
-    trades.forEach(function(x){if(x.pl>0){cw++;cl=0;lw=Math.max(lw,cw);}else{cl++;cw=0;ll=Math.max(ll,cl);}});
-    return {eq:eq,bh:bh,tr:tr,bhr:bhr,cagr:cagr,bhCagr:bhCagr,sharpe:sharpe,sortino:sortino,calmar:calmar,mdd:mdd,ddDur:ddDur,volAnn:volAnn,beta:beta,alpha:alpha,ir:ir,var95:var95,pctInv:pctInv,daysLong:daysLong,nTrades:trades.length,wr:wr,aw:aw,al:al,pf:pf,lw:lw,ll:ll,yrs:yrs};
+    if(inPos){var tr=prices[n-1].c/entry-1;if(tr>0)wins.push(tr);else losses.push(tr);}
+    var years=(prices[n-1].t-prices[0].t)/(365.25*24*3600*1000);
+    var cagr=Math.pow(eq,1/Math.max(years,0.01))-1,bhCagr=Math.pow(bhEq,1/Math.max(years,0.01))-1;
+    // vol & sharpe / sortino (annualised, rf=0)
+    var mean=avg(rets.slice(1)),std=stdev(rets.slice(1),mean),neg=rets.slice(1).filter(function(x){return x<0;}),dStd=stdev(neg,0);
+    var sharpe=std>0?mean/std*Math.sqrt(252):0;
+    var sortino=dStd>0?mean/dStd*Math.sqrt(252):0;
+    var vol=std*Math.sqrt(252);
+    // drawdown
+    var peak=eqArr[0],maxDD=0,ddStart=0,ddEnd=0,curStart=0,maxLen=0;
+    for(var i=0;i<eqArr.length;i++){if(eqArr[i]>peak){peak=eqArr[i];curStart=i;}var dd=eqArr[i]/peak-1;if(dd<maxDD){maxDD=dd;ddStart=curStart;ddEnd=i;}}
+    var ddLen=ddEnd-ddStart;if(ddLen>maxLen)maxLen=ddLen;
+    // VaR 95 (daily)
+    var sorted=rets.slice(1).slice().sort(function(a,b){return a-b;});var var95=sorted.length?sorted[Math.floor(sorted.length*0.05)]:0;
+    // streaks
+    var lw=0,ll=0,curW=0,curL=0;for(var i=0;i<wins.length+losses.length;i++){}
+    // alpha vs B&H, beta
+    var bhMean=avg(bh.slice(1)),bhStd=stdev(bh.slice(1),bhMean);var cov=covariance(rets.slice(1),bh.slice(1),mean,bhMean);var beta=bhStd>0?cov/(bhStd*bhStd):0;var alpha=(mean-beta*bhMean)*252;
+    // info ratio (vs B&H)
+    var diff=rets.slice(1).map(function(x,i){return x-bh.slice(1)[i];});var diffMean=avg(diff),diffStd=stdev(diff,diffMean);var ir=diffStd>0?diffMean/diffStd*Math.sqrt(252):0;
+    // win rate, profit factor
+    var wr=(wins.length+losses.length)>0?wins.length/(wins.length+losses.length):0;
+    var avgWin=wins.length?avg(wins):0,avgLoss=losses.length?avg(losses):0;
+    var pf=losses.length&&Math.abs(losses.reduce(function(a,b){return a+b;},0))>0?Math.abs(wins.reduce(function(a,b){return a+b;},0)/losses.reduce(function(a,b){return a+b;},0)):wins.length?Infinity:0;
+    var calmar=maxDD<0?cagr/Math.abs(maxDD):0;
+    return {n:n,years:years,totalRet:eq-1,bhTotal:bhEq-1,cagr:cagr,bhCagr:bhCagr,alpha:alpha,beta:beta,timeInvested:longDays/n,sharpe:sharpe,sortino:sortino,calmar:calmar,ir:ir,vol:vol,maxDD:maxDD,maxDDLen:maxLen,var95:var95,trades:trades,winRate:wr,avgWin:avgWin,avgLoss:avgLoss,pf:pf,longDays:longDays,eqArr:eqArr,bhArr:bhArr};
+  }
+  function avg(a){if(!a.length)return 0;var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+  function stdev(a,m){if(a.length<2)return 0;var s=0;for(var i=0;i<a.length;i++)s+=Math.pow(a[i]-m,2);return Math.sqrt(s/(a.length-1));}
+  function covariance(a,b,ma,mb){var n=Math.min(a.length,b.length);if(n<2)return 0;var s=0;for(var i=0;i<n;i++)s+=(a[i]-ma)*(b[i]-mb);return s/(n-1);}
+
+  // ---------- Plot ----------
+  function plot(eqArr,bhArr){
+    var W=800,H=280,P=32,n=eqArr.length;
+    var mx=Math.max(Math.max.apply(null,eqArr),Math.max.apply(null,bhArr)),mn=Math.min(Math.min.apply(null,eqArr),Math.min.apply(null,bhArr));
+    var sx=function(i){return P+i/(n-1)*(W-2*P);},sy=function(v){return H-P-(v-mn)/(mx-mn||1)*(H-2*P);};
+    function path(arr){var s='';for(var i=0;i<arr.length;i++)s+=(i===0?'M':'L')+sx(i).toFixed(1)+' '+sy(arr[i]).toFixed(1);return s;}
+    return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;background:#fff;border:1px solid #E2E8F0;border-radius:8px;margin:12px 0">'+
+      '<path d="'+path(bhArr)+'" fill="none" stroke="#94A3B8" stroke-width="1.5"></path>'+
+      '<path d="'+path(eqArr)+'" fill="none" stroke="#C9A227" stroke-width="2"></path>'+
+      '<text x="'+(W-P)+'" y="16" text-anchor="end" font-size="11" fill="#64748B"><tspan fill="#C9A227">—— Strategy</tspan>  <tspan fill="#94A3B8">—— Buy &amp; Hold</tspan></text>'+
+      '</svg>';
   }
 
-  function plot(r){
-    var w=720,h=280,p={t:16,r:16,b:24,l:52};
-    var n=r.eq.length;
-    var all=r.eq.concat(r.bh),min=Math.min.apply(null,all),max=Math.max.apply(null,all);
-    function x(i){return p.l+(i/(n-1))*(w-p.l-p.r);}
-    function y(v){return h-p.b-((v-min)/(max-min||1))*(h-p.t-p.b);}
-    function path(a,c){var d=a.map(function(v,i){return (i===0?'M':'L')+x(i).toFixed(1)+' '+y(v).toFixed(1);}).join(' ');return '<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="1.8"/>';}
-    var g='';for(var i=0;i<=4;i++){var v=min+(i/4)*(max-min);var yy=y(v);g+='<line x1="'+p.l+'" y1="'+yy+'" x2="'+(w-p.r)+'" y2="'+yy+'" stroke="#E2E8F0"/><text x="'+(p.l-6)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10" fill="#64748B" font-family="IBM Plex Mono, monospace">'+v.toFixed(2)+'x</text>';}
-    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" role="img">'+g+path(r.bh,'#94A3B8')+path(r.eq,'#C9A227')+'</svg><div class="plot-legend"><span><i style="background:#C9A227"></i> Strategy</span><span><i style="background:#94A3B8"></i> Buy &amp; hold</span></div>';
-  }
-  function pct(v){return (v*100).toFixed(2)+'%';}
-  function num(v,d){return (v||0).toFixed(d||2);}
-  function stat(l,v,cls){return '<div><span class="muted small">'+l+'</span><strong'+(cls?' class="'+cls+'"':'')+'>'+v+'</strong></div>';}
-  function render(r){
-    var out=document.getElementById('bt-out');
-    out.innerHTML='<div class="bt-results">'+
-      '<h3 style="margin-top:0">Returns</h3><div class="bt-stats">'+
-        stat('Years',num(r.yrs,1))+stat('Strategy total',pct(r.tr),r.tr>=0?'gain':'loss')+stat('B&amp;H total',pct(r.bhr),r.bhr>=0?'gain':'loss')+stat('Strategy CAGR',pct(r.cagr))+stat('B&amp;H CAGR',pct(r.bhCagr))+stat('Alpha (ann.)',pct(r.alpha),r.alpha>=0?'gain':'loss')+stat('Beta vs B&amp;H',num(r.beta))+stat('% time invested',pct(r.pctInv))+
-      '</div>'+
-      '<h3>Risk</h3><div class="bt-stats">'+
-        stat('Sharpe',num(r.sharpe))+stat('Sortino',num(r.sortino))+stat('Calmar',num(r.calmar))+stat('Info ratio',num(r.ir))+stat('Volatility (ann.)',pct(r.volAnn))+stat('Max drawdown',pct(r.mdd),'loss')+stat('Max DD length',r.ddDur+'d')+stat('VaR 95% (1d)',pct(r.var95),'loss')+
-      '</div>'+
-      '<h3>Trades</h3><div class="bt-stats">'+
-        stat('# Trades',num(r.nTrades,0))+stat('Win rate',pct(r.wr))+stat('Avg win',pct(r.aw),'gain')+stat('Avg loss',pct(r.al),'loss')+stat('Profit factor',num(r.pf))+stat('Longest win streak',r.lw)+stat('Longest loss streak',r.ll)+stat('Days long',r.daysLong)+
-      '</div>'+
-      '<h3>Equity curve</h3><div class="bt-plot">'+plot(r)+'</div>'+
-      '<p class="small muted" style="margin-top:16px">Long-only daily bars, lag-1 (no look-ahead). No costs, slippage, taxes, or borrow modelled. Past performance does not predict future. Educational only.</p>'+
-    '</div>';
+  function pct(x){return (x*100).toFixed(2)+'%';}
+  function num(x,d){return (x||0).toFixed(d||2);}
+
+  function renderResult(meta,r){
+    var rows=[['Years',num(r.years,2)],['Bars',r.n],['Strategy total',pct(r.totalRet)],['Buy & hold total',pct(r.bhTotal)],['Strategy CAGR',pct(r.cagr)],['B&H CAGR',pct(r.bhCagr)],['Alpha (ann.)',pct(r.alpha)],['Beta',num(r.beta,2)],['Time invested',pct(r.timeInvested)],['Sharpe',num(r.sharpe,2)],['Sortino',num(r.sortino,2)],['Calmar',num(r.calmar,2)],['Info ratio',num(r.ir,2)],['Volatility (ann.)',pct(r.vol)],['Max drawdown',pct(r.maxDD)],['Max DD length (bars)',r.maxDDLen],['Daily VaR 95%',pct(r.var95)],['Trades',r.trades],['Win rate',pct(r.winRate)],['Avg win',pct(r.avgWin)],['Avg loss',pct(r.avgLoss)],['Profit factor',isFinite(r.pf)?num(r.pf,2):'∞'],['Days long',r.longDays]];
+    var tbl='<table class="calc-out"><tbody>'+rows.map(function(p){return '<tr><th>'+p[0]+'</th><td>'+p[1]+'</td></tr>';}).join('')+'</tbody></table>';
+    document.getElementById('bt-out').innerHTML='<div class="callout"><strong>'+meta.label+'</strong> · '+meta.strat+' · '+meta.range+'</div>'+plot(r.eqArr,r.bhArr)+tbl+'<p class="muted small">Long-only, daily bars, lag-1 (no look-ahead). No costs / slippage / taxes modelled. Educational only.</p>';
   }
 
-  function opts(){
-    var h='';
-    Object.keys(TICKERS).forEach(function(g){h+='<optgroup label="'+g+'">';TICKERS[g].forEach(function(t){h+='<option value="'+t[0]+'">'+t[1]+' ('+t[0]+')</option>';});h+='</optgroup>';});
-    return h;
+  function run(){
+    var sel=document.getElementById('bt-asset').value;var strat=document.getElementById('bt-strat').value;var yrs=document.getElementById('bt-yrs').value;
+    var parts=sel.split('::'),group=parts[0],ticker=parts[1];var info=ASSETS[group];var label=info.items.filter(function(it){return it[0]===ticker;})[0][1];
+    status('Fetching '+label+'…','#64748B');document.getElementById('bt-out').innerHTML='';
+    var p=info.type==='crypto'?fetchCrypto(ticker,yrs==='max'?'max':(parseInt(yrs)*365)):fetchEquity(ticker,yrs);
+    p.then(function(prices){if(prices.length<60)throw new Error('Need 60+ daily bars (got '+prices.length+')');status('Running '+strat.toUpperCase()+' on '+prices.length+' bars…','#64748B');var sig=buildSignal(prices,strat);var r=backtest(prices,sig);status('Done. '+pct(r.totalRet)+' vs B&H '+pct(r.bhTotal)+'.','#10B981');renderResult({label:label,strat:STRATS.filter(function(s){return s[0]===strat;})[0][1],range:yrs+' yr'},r);}).catch(function(e){status('Error: '+(e.message||e),'#EF4444');});
   }
-  host.innerHTML='<form id="bt-form" class="bt-form" onsubmit="return false">'+
-    '<div class="field"><label for="bt-preset">Quick pick (60+ instruments)</label><select id="bt-preset">'+opts()+'</select></div>'+
-    '<div class="field"><label for="bt-ticker">Or type a ticker</label><input id="bt-ticker" value="bitcoin" placeholder="bitcoin, ^spx, aapl.us, tcs.in…"></div>'+
-    '<div class="field"><label for="bt-strategy">Strategy</label><select id="bt-strategy"><option value="sma">SMA 50/200 crossover</option><option value="rsi">RSI(14) mean-reversion</option><option value="macd">MACD(12/26/9)</option><option value="boll">Bollinger reversion (20,2)</option></select></div>'+
-    '<div class="field"><label for="bt-days">History (crypto, days)</label><input id="bt-days" type="number" min="90" max="3650" step="1" value="1825"></div>'+
-    '<button type="submit" class="btn btn-primary" id="bt-run">Run backtest</button>'+
-    '<p class="small muted" style="margin-top:10px">Equities/indices fetched via CORS proxy (Stooq sends no CORS header). Crypto from CoinGecko direct. All math runs locally in your browser.</p>'+
-  '</form><div id="bt-out"></div>';
-
-  document.getElementById('bt-preset').addEventListener('change',function(e){document.getElementById('bt-ticker').value=e.target.value;});
-  document.getElementById('bt-run').addEventListener('click',function(){
-    var out=document.getElementById('bt-out');
-    var t=document.getElementById('bt-ticker').value.trim().toLowerCase();
-    var s=document.getElementById('bt-strategy').value;
-    var d=parseInt(document.getElementById('bt-days').value,10)||1825;
-    if(!t){out.innerHTML='<p class="callout danger small">Enter a ticker.</p>';return;}
-    out.innerHTML='<p class="muted small">Fetching data… (5–15s on first request)</p>';
-    var crypto=isCryptoId(t)||(!t.includes('.')&&!t.startsWith('^'));
-    var p=crypto?fetchCrypto(t,d):fetchEquity(t);
-    p.then(function(series){
-      if(!series||series.length<60){out.innerHTML='<p class="callout danger small">Not enough data (need 60+ bars). Pick from the dropdown.</p>';return;}
-      render(runBacktest(series,s));
-    }).catch(function(err){out.innerHTML='<p class="callout danger small">Fetch failed: '+(err&&err.message?err.message:'unknown')+'. Try again in 30s or pick another ticker.</p>';});
-  });
 })();
