@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Privacy Policy — Epicenter Exchange</title>
-  <meta name="description" content="Privacy policy for Epicenter Exchange. We don't track you, we don't sell data, we don't run advertising.">
+  <meta name="description" content="Privacy policy for Epicenter Exchange. What we collect, what we don't, and how Google Analytics + AdSense work on the site.">
   <link rel="canonical" href="https://epicenterexchange.com/privacy.html">
+  <meta name="theme-color" content="#0B1F3A">
+  <meta name="google-adsense-account" content="ca-pub-6484525483464374">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,49 +17,67 @@
   <script defer src="/assets/js/main.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
   <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
 </div></header>
 
-<main class="prose">
+<main id="main" class="prose">
   <h1>Privacy Policy</h1>
   <p class="muted small">Last updated: 25 May 2026</p>
 
-  <div class="callout"><strong>Short version:</strong> We don't track you, we don't run advertising, we don't sell anything. The site is static HTML on GitHub Pages. The only personal data we ever see is what you voluntarily type into the contact form or newsletter signup.</div>
+  <div class="callout"><strong>Short version:</strong> Epicenter Exchange is a free, educational site funded by Google AdSense. We use Google Analytics 4 to count anonymous visits and AdSense to serve ads. Both run only after you give consent through the cookie banner. We do not sell your data. We do not run our own user accounts.</div>
 
   <h2>1. Who we are</h2>
-  <p>Epicenter Exchange (“the site”) is a non-commercial, educational website operated solo. The site is hosted on GitHub Pages and the source is open on GitHub.</p>
+  <p>Epicenter Exchange is a non-commercial, educational website operated solo. It is hosted on GitHub Pages and the source is open on GitHub. Contact: see the <a href="/contact.html">contact form</a>.</p>
 
   <h2>2. What we collect</h2>
   <ul>
+    <li><strong>Google Analytics 4:</strong> anonymous usage data (pages viewed, country, device class, referrer). IP anonymisation is enabled. Analytics cookies only run after you click <em>Accept all</em> on the consent banner. If you choose <em>Reject non-essential</em>, no analytics cookies are set.</li>
+    <li><strong>Google AdSense:</strong> serves the ads you see on the site. If you accept, ads may be personalised using AdSense cookies. If you reject, AdSense still loads but serves only <em>non-personalised</em> ads (no profiling). AdSense may also use the IAB Europe Transparency &amp; Consent Framework where applicable.</li>
     <li><strong>Server logs (GitHub Pages):</strong> GitHub may temporarily log IP addresses, user agent strings, and timestamps for abuse prevention. We do not access or store these logs separately. See GitHub's privacy statement.</li>
-    <li><strong>Contact form:</strong> when you submit the form, your name, email, topic, and message are sent through Formspree, who relays them to us. See Formspree's privacy policy.</li>
+    <li><strong>Contact form:</strong> when you submit, your name, email, topic, and message are sent through Formspree, who relays them to us. See Formspree's privacy policy.</li>
     <li><strong>Newsletter:</strong> if you subscribe, your email address is stored by Buttondown solely for the purpose of sending the newsletter. See Buttondown's privacy policy.</li>
-    <li><strong>Calculator inputs:</strong> values you type into the SIP / EMI / retirement calculators are stored only in <em>your own browser</em> via <code>localStorage</code> so they survive a refresh. They are not sent anywhere.</li>
+    <li><strong>Calculator inputs:</strong> values you type into the SIP / EMI / retirement / tax / FX calculators are stored only in <em>your own browser</em> via <code>localStorage</code>. They are not sent anywhere.</li>
+    <li><strong>Backtester:</strong> all calculations happen client-side in your browser. The tickers you query go directly to CoinGecko or Stooq from your browser.</li>
   </ul>
 
-  <h2>3. What we don't collect</h2>
+  <h2>3. Google Consent Mode v2</h2>
+  <p>We implement <strong>Google Consent Mode v2</strong> as required for users in the EEA, UK and Switzerland. Before you make a choice, all advertising and analytics storage signals default to <em>denied</em> and no cookies are set. When you choose <em>Accept</em>, we update <code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code> and <code>analytics_storage</code> to <em>granted</em>. When you choose <em>Reject</em>, they stay <em>denied</em> and Google receives only aggregated, cookieless pings.</p>
+
+  <h2>4. Third-party services we use</h2>
   <ul>
-    <li>No Google Analytics, no Plausible, no Fathom, no Hotjar, no Meta Pixel.</li>
-    <li>No tracking cookies, no advertising cookies, no third-party fingerprinting.</li>
-    <li>No login system, so no accounts and no passwords to lose.</li>
+    <li><strong>Google AdSense</strong> — advertising. <a href="https://policies.google.com/technologies/ads" rel="noopener">How Google uses ad data</a>. You can opt out of personalised ads at <a href="https://www.google.com/settings/ads" rel="noopener">Google Ad Settings</a>.</li>
+    <li><strong>Google Analytics 4</strong> — anonymous usage analytics. <a href="https://policies.google.com/privacy" rel="noopener">Google Privacy Policy</a>. You can opt out with the <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">GA opt-out browser add-on</a>.</li>
+    <li><strong>CoinGecko</strong> — free public API for live crypto prices. Your browser requests data directly.</li>
+    <li><strong>Stooq</strong> — free public CSV API for historical equity prices used by the backtester.</li>
+    <li><strong>Formspree</strong> — contact form delivery.</li>
+    <li><strong>Buttondown</strong> — newsletter service.</li>
+    <li><strong>Google Fonts</strong> — web typography (Inter, Fraunces, IBM Plex Mono).</li>
+    <li><strong>GitHub Pages</strong> — static site hosting.</li>
   </ul>
 
-  <h2>4. Third-party APIs we read from</h2>
-  <p>The home and markets pages fetch live crypto prices from the public <strong>CoinGecko</strong> API. Your browser makes that request directly; CoinGecko will see your IP address and user agent for the duration of the request. We do not pass any other information.</p>
+  <h2>5. Cookies</h2>
+  <p>See the <a href="/cookies.html">cookie policy</a> for a full table of every cookie that can be set, including AdSense and Google Analytics cookies.</p>
 
-  <h2>5. Your rights</h2>
-  <p>If you have submitted a contact form or subscribed to the newsletter, you may write to us via the <a href="/contact.html">contact form</a> at any time to ask us to delete your data. Newsletter unsubscribes are one click from the footer of every email.</p>
-
-  <h2>6. Cookies</h2>
-  <p>See the <a href="/cookies.html">cookie policy</a> — short version, we don't set any.</p>
+  <h2>6. Your rights</h2>
+  <p>Depending on where you live (GDPR, UK GDPR, India DPDP Act, CCPA, etc.), you may have the right to access, correct, delete, or restrict processing of your personal data. To exercise these rights, write to us via the <a href="/contact.html">contact form</a>. To withdraw consent at any time, clear your browser storage for this site and reload — the consent banner will reappear.</p>
 
   <h2>7. Children</h2>
-  <p>The site is not directed at children under 13 and we do not knowingly collect data from them.</p>
+  <p>The site is not directed at children under 13 (or under 16 in some jurisdictions) and we do not knowingly collect data from them.</p>
 
-  <h2>8. Changes</h2>
-  <p>If this policy materially changes, the date at the top of the page will be updated.</p>
+  <h2>8. Data transfers</h2>
+  <p>Google, Formspree, Buttondown, and GitHub may process data in the United States or other countries. Where applicable they rely on Standard Contractual Clauses approved by the European Commission.</p>
+
+  <h2>9. Security</h2>
+  <p>The site is served entirely over HTTPS. We don't run a database that holds personal data — only an anonymous request-counting database on the optional API server. We have no usernames or passwords to lose because there is no login system.</p>
+
+  <h2>10. Changes</h2>
+  <p>If this policy materially changes, the date at the top will be updated. Material changes will be highlighted on the homepage for at least 30 days.</p>
+
+  <p class="muted small mt-12">Contact for privacy queries: via the <a href="/contact.html">contact form</a>, subject "Privacy".</p>
 </main>
 
 <footer class="site-footer">
@@ -66,6 +87,6 @@
     <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
     <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
   </div>
-  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free · Not SEBI / SEC / FCA registered</div>
 </footer>
 </body></html>
