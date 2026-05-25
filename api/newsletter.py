@@ -34,8 +34,27 @@ def subscribe(payload: SubIn, request: Request) -> dict:
     return {"subscribed": True, "already_existed": True}
 
 
+_UNSUB_PAGE_CSS = (
+    "body{font-family:Inter,Segoe UI,sans-serif;background:#F8FAFC;"
+    "padding:60px 20px;text-align:center;color:#0F172A;margin:0}"
+    ".c{max-width:520px;margin:0 auto;background:#fff;padding:40px;"
+    "border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.06)}"
+    "h1{color:#0B1F3A;font-family:Fraunces,Georgia,serif;margin:0 0 16px}"
+    "p{color:#475569;line-height:1.6;margin:0}"
+    "a{color:#C9A227;text-decoration:none;font-weight:600}"
+)
+
+
 @router.get("/newsletter/unsubscribe", response_class=HTMLResponse)
 def unsub(token: str = Query(..., min_length=10, max_length=200)) -> str:
     ok = unsubscribe(token)
-    msg = "You have been unsubscribed." if ok else "Token not found or already unsubscribed."
-    return f"<!doctype html><html><head><meta charset='utf-8'><title>Unsubscribed — Epicenter Exchange</title><style>bodyfont-family:Inter,Segoe UI,sans-serif;background:#F8FAFC;padding:60px 20px;text-align:center;color:#0F172A.cmax-width:520px;margin:0 auto;background:#fff;padding:40px;border-radius:12pxh1color:#0B1F3A;font-family:Fraunces,Georgia,serifacolor:#C9A227;text-decoration:none</style></head><body><div class='c'><h1>{msg}</h1><p>Re-subscribe anytime at <a href='https://epicenterexchange.com/insights.html'>epicenterexchange.com</a>.</p></div></body></html>"
+    title = "You have been unsubscribed." if ok else "Token not found or already unsubscribed."
+    return (
+        f"<!doctype html><html lang='en'><head><meta charset='utf-8'>"
+        f"<title>Unsubscribed — Epicenter Exchange</title>"
+        f"<style>{_UNSUB_PAGE_CSS}</style></head><body><div class='c'>"
+        f"<h1>{title}</h1>"
+        f"<p>Re-subscribe anytime at "
+        f"<a href='https://epicenterexchange.com/insights.html'>epicenterexchange.com</a>.</p>"
+        f"</div></body></html>"
+    )
