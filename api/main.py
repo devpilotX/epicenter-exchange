@@ -10,8 +10,7 @@ from __future__ import annotations
 
 import os
 import time
-from datetime import datetime, timedelta
-from typing import Optional
+from datetime import datetime
 
 import httpx
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -23,13 +22,20 @@ from .db import init_db, log_request, get_cached_prices, set_cached_prices, publ
 from .backtest import run_backtest
 
 API_VERSION = "1.0.0"
+
+COINGECKO_BASE = "https://api.coingecko.com/api/v3"
+STOOQ_BASE = "https://stooq.com/q/d/l/"
+
 ALLOWED_ORIGINS = [
     "https://epicenterexchange.com",
     "https://www.epicenterexchange.com",
 ]
 if os.environ.get("ALLOW_LOCALHOST") == "1":
-    ALLOWED_ORIGINS.append("http://localhost:8000")
-    ALLOWED_ORIGINS.append("http://127.0.0.1:5500")
+    ALLOWED_ORIGINS.extend([
+        "http://localhost:8000",
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ])
 
 app = FastAPI(
     title="Epicenter Exchange API",
@@ -92,33 +98,44 @@ class BacktestResponse(BaseModel):
     disclaimer: str
 
 
-def _coingecko_history(coin_id: str, days: int) -> list[tuple[int, float]]:
-    cached = get_cached_prices(f"cg:{coin_id}:{days}", max_age_hours=24)
+def _coingecko_history(coin_id: str, days: int) -> list:
+    cache_key = "cg:" + coin_id + ":" + str(days)
+    cached = get_cached_prices(cache_key, max_age_hours=24)
     if cached is not None:
         return cached
-    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
+    url = COINGECKO_BASE + "/coins/" + coin_id + "/market_chart"
     params = {"vs_currency": "usd", "days": days, "interval": "daily"}
-    with httpx.Client(timeout=30.0) as client:
-        r = client.get(url, params=params)
+    try:
+        with httpx.Client(timeout=30.0) as client:
+            r = client.get(url, params=params)
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail="CoinGecko request failed: " + str(e))
+    if r.status_code == 429:
+        raise HTTPException(status_code=429, detail="CoinGecko rate-limited. Try again in 60s.")
     if r.status_code != 200:
-        raise HTTPException(status_code=502, detail=f"CoinGecko returned {r.status_code}")
+        raise HTTPException(status_code=502, detail="CoinGecko returned " + str(r.status_code))
     data = r.json().get("prices", [])
     series = [(int(p[0]), float(p[1])) for p in data if isinstance(p, list) and len(p) >= 2]
-    set_cached_prices(f"cg:{coin_id}:{days}", series)
+    if series:
+        set_cached_prices(cache_key, series)
     return series
 
 
-def _stooq_history(ticker: str) -> list[tuple[int, float]]:
-    cached = get_cached_prices(f"stooq:{ticker.lower()}", max_age_hours=24)
+def _stooq_history(ticker: str) -> list:
+    cache_key = "stooq:" + ticker.lower()
+    cached = get_cached_prices(cache_key, max_age_hours=24)
     if cached is not None:
         return cached
-    url = f"https://stooq.com/q/d/l/?s={ticker.lower()}&i=d"
-    with httpx.Client(timeout=30.0) as client:
-        r = client.get(url)
+    params = {"s": ticker.lower(), "i": "d"}
+    try:
+        with httpx.Client(timeout=30.0) as client:
+            r = client.get(STOOQ_BASE, params=params)
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail="Stooq request failed: " + str(e))
     if r.status_code != 200 or not r.text.strip():
-        raise HTTPException(status_code=502, detail=f"Stooq returned {r.status_code}")
+        raise HTTPException(status_code=502, detail="Stooq returned " + str(r.status_code))
     lines = r.text.strip().splitlines()
-    series: list[tuple[int, float]] = []
+    series = []
     for line in lines[1:]:
         parts = line.split(",")
         if len(parts) < 5:
@@ -131,7 +148,7 @@ def _stooq_history(ticker: str) -> list[tuple[int, float]]:
         series.append((ts, close))
     if not series:
         raise HTTPException(status_code=404, detail="No data for that ticker on Stooq")
-    set_cached_prices(f"stooq:{ticker.lower()}", series)
+    set_cached_prices(cache_key, series)
     return series
 
 
@@ -191,7 +208,12 @@ def prices(ticker: str, asset: str = Query("crypto"), days: int = Query(365, ge=
         series = _coingecko_history(ticker, days)
     else:
         series = _stooq_history(ticker)
-    return {"ticker": ticker, "asset": asset, "n": len(series), "series": [{"t": t, "c": c} for t, c in series[-days:]]}
+    return {
+        "ticker": ticker,
+        "asset": asset,
+        "n": len(series),
+        "series": [{"t": t, "c": c} for t, c in series[-days:]],
+    }
 
 
 @app.get("/signals/today")
@@ -202,7 +224,7 @@ def signals_today() -> dict:
         ("equity", "^spx"), ("equity", "^ndx"), ("equity", "^ftse"),
         ("equity", "^nse"), ("equity", "reliance.in"), ("equity", "tcs.in"),
     ]
-    out: list[dict] = []
+    out = []
     for asset, ticker in watched:
         try:
             series = _coingecko_history(ticker, 365) if asset == "crypto" else _stooq_history(ticker)
@@ -229,4 +251,7 @@ def stats() -> dict:
 
 @app.exception_handler(Exception)
 async def _unhandled(request: Request, exc: Exception) -> JSONResponse:
-    return JSONResponse(status_code=500, content={"detail": "Internal error", "type": type(exc).__name__})
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal error", "type": type(exc).__name__},
+    )
