@@ -3,29 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Insights — Slow, data-grounded essays on markets · Epicenter Exchange</title>
-  <meta name="description" content="Long-form essays on India, US, UK, and crypto markets. One slow, math-grounded article every fortnight. Free, ad-free, no tracking.">
+  <title>Insights — Searchable Essays on Markets &amp; Money · Epicenter Exchange</title>
+  <meta name="description" content="Slow, data-grounded essays on India, US, UK, and crypto markets. Searchable archive. One new article every fortnight. Free, ad-free, no tracking.">
   <link rel="canonical" href="https://epicenterexchange.com/insights.html">
   <meta property="og:title" content="Insights — Epicenter Exchange">
-  <meta property="og:description" content="Long-form essays on India, US, UK, and crypto markets.">
+  <meta property="og:description" content="Long-form, math-grounded essays on India, US, UK, and crypto markets.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://epicenterexchange.com/insights.html">
   <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0B1F3A">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="Epicenter Insights" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
   <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/search.js"></script>
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"Blog",
+    "name":"Epicenter Insights",
+    "url":"https://epicenterexchange.com/insights.html",
+    "description":"Long-form, math-grounded essays on global markets.",
+    "publisher":{"@type":"Organization","name":"Epicenter Exchange","url":"https://epicenterexchange.com/"}
+  }</script>
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://epicenterexchange.com/"},
+      {"@type":"ListItem","position":2,"name":"Insights","item":"https://epicenterexchange.com/insights.html"}
+    ]
+  }</script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
   <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
-  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+  <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html" aria-current="page">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
 </div></header>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">›</span><span aria-current="page">Insights</span></nav>
 
-<main>
+<main id="main">
   <section class="hero hero-narrow">
     <div class="container">
       <span class="chip">Insights</span>
@@ -34,9 +57,12 @@
     </div>
   </section>
 
-  <section>
+  <section style="padding-top:0">
     <div class="container">
-      <div class="grid grid-3">
+      <div class="search-box"><label for="search-box" class="sr-only">Search articles</label><input id="search-box" type="search" placeholder="Search articles — try “SIP”, “Bitcoin”, “XIRR”…" autocomplete="off"></div>
+      <div id="search-results"></div>
+
+      <div class="grid grid-3" id="all-articles">
         <a href="/insights/sip-vs-lumpsum-india-2026.html" class="card article-card">
           <span class="tag">India · 9 min read</span>
           <h3>SIP vs Lumpsum in India 2026</h3>
@@ -53,7 +79,7 @@
           <p class="muted">Two return numbers, one shows you what you actually earned. Worked examples in INR.</p>
         </a>
       </div>
-      <p class="muted small mt-12" style="text-align:center">New essays land roughly every other Sunday. Older essays are archived without changes.</p>
+      <p class="muted small mt-12" style="text-align:center">New essays land roughly every other Sunday. Older essays are archived without changes. <a href="/feed.xml">RSS feed</a>.</p>
     </div>
   </section>
 
