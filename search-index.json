@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "updated": "2026-05-25",
+  "items": [
+    {
+      "url": "/insights/sip-vs-lumpsum-india-2026.html",
+      "title": "SIP vs Lumpsum in India 2026",
+      "tag": "India",
+      "read": "9 min read",
+      "summary": "A data-driven look at 25 years of NIFTY data to settle the SIP-vs-lumpsum question for Indian investors.",
+      "keywords": "sip lumpsum mutual fund nifty india systematic investment plan rupee cost averaging"
+    },
+    {
+      "url": "/insights/bitcoin-halving-cycles-explained.html",
+      "title": "Bitcoin halving cycles, explained",
+      "tag": "Crypto",
+      "read": "8 min read",
+      "summary": "Why the four-year halving cycle exists, what the data actually shows, and what it can't predict.",
+      "keywords": "bitcoin btc halving cycle four year crypto cryptocurrency mining block reward stock to flow"
+    },
+    {
+      "url": "/insights/xirr-vs-cagr-which-matters.html",
+      "title": "XIRR vs CAGR — which one matters?",
+      "tag": "Math",
+      "read": "7 min read",
+      "summary": "Two return numbers, one shows you what you actually earned. Worked examples in INR.",
+      "keywords": "xirr cagr return calculation money weighted irr internal rate return investment math"
+    }
+  ]
+}

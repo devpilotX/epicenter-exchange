@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Epicenter Exchange — Insights</title>
+  <link>https://epicenterexchange.com/insights.html</link>
+  <atom:link href="https://epicenterexchange.com/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Slow, data-grounded essays on markets and money. One essay every fortnight. Free, ad-free, no tracking.</description>
+  <language>en-IN</language>
+  <lastBuildDate>Mon, 25 May 2026 00:00:00 +0530</lastBuildDate>
+  <image>
+    <url>https://epicenterexchange.com/assets/img/icon-512.svg</url>
+    <title>Epicenter Exchange</title>
+    <link>https://epicenterexchange.com</link>
+  </image>
+  <item>
+    <title>SIP vs Lumpsum in India 2026</title>
+    <link>https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026.html</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026.html</guid>
+    <pubDate>Sun, 11 May 2026 00:00:00 +0530</pubDate>
+    <category>India</category>
+    <description>A data-driven look at 25 years of NIFTY data to settle the SIP-vs-lumpsum question for Indian investors.</description>
+  </item>
+  <item>
+    <title>Bitcoin halving cycles, explained</title>
+    <link>https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained.html</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained.html</guid>
+    <pubDate>Sun, 27 Apr 2026 00:00:00 +0530</pubDate>
+    <category>Crypto</category>
+    <description>Why the four-year halving cycle exists, what the data actually shows, and what it can't predict.</description>
+  </item>
+  <item>
+    <title>XIRR vs CAGR — which one matters?</title>
+    <link>https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters.html</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters.html</guid>
+    <pubDate>Sun, 13 Apr 2026 00:00:00 +0530</pubDate>
+    <category>Math</category>
+    <description>Two return numbers, one shows you what you actually earned. Worked examples in INR.</description>
+  </item>
+</channel>
+</rss>
