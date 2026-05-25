@@ -3,44 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Tools — SIP, EMI &amp; Retirement Calculators · Epicenter Exchange</title>
-  <meta name="description" content="Free, working SIP, EMI, and retirement calculators with proper money-weighted math. Inputs save in your browser. No login, no tracking.">
+  <title>Tools — SIP, EMI, Tax, FX &amp; Retirement Calculators · Epicenter Exchange</title>
+  <meta name="description" content="Free, working calculators: SIP, step-up SIP, EMI, retirement, India capital-gains tax estimator, and a live FX converter. Real money-weighted math. No login, no tracking.">
   <link rel="canonical" href="https://epicenterexchange.com/tools.html">
-  <meta property="og:title" content="Free SIP, EMI &amp; Retirement Calculators">
-  <meta property="og:description" content="Working calculators with proper money-weighted math. No login.">
+  <meta property="og:title" content="Free Financial Calculators">
+  <meta property="og:description" content="SIP, step-up SIP, EMI, retirement, capital-gains tax, and FX. Real math, no login.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://epicenterexchange.com/tools.html">
   <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0B1F3A">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="Epicenter Insights" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/calculators.js"></script>
+  <script defer src="/assets/js/extras.js"></script>
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://epicenterexchange.com/"},
+      {"@type":"ListItem","position":2,"name":"Tools","item":"https://epicenterexchange.com/tools.html"}
+    ]
+  }</script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
   <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
-  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+  <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html" aria-current="page">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
 </div></header>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">›</span><span aria-current="page">Tools</span></nav>
 
-<main>
+<main id="main">
   <section class="hero hero-narrow">
     <div class="container">
       <span class="chip">Tools</span>
-      <h1>Three calculators. Real math.</h1>
-      <p class="lede">Built on the same money-weighted (XIRR-style) formulas a fee-only adviser would use. Drag the sliders and watch the numbers update live. Nothing is stored on a server.</p>
+      <h1>Six calculators. Real math.</h1>
+      <p class="lede">Money-weighted (XIRR-style) formulas a fee-only adviser would use. Drag the sliders and watch the numbers update live. Nothing is stored on a server.</p>
     </div>
   </section>
 
   <section style="padding-top:24px">
     <div class="container">
       <div class="calc-tabs" role="tablist">
-        <button class="calc-tab active" data-tab="panel-sip" role="tab">SIP Calculator</button>
-        <button class="calc-tab" data-tab="panel-emi" role="tab">EMI Calculator</button>
-        <button class="calc-tab" data-tab="panel-ret" role="tab">Retirement Planner</button>
+        <button class="calc-tab active" data-tab="panel-sip" role="tab">SIP</button>
+        <button class="calc-tab" data-tab="panel-sup" role="tab">Step-up SIP</button>
+        <button class="calc-tab" data-tab="panel-emi" role="tab">EMI</button>
+        <button class="calc-tab" data-tab="panel-ret" role="tab">Retirement</button>
+        <button class="calc-tab" data-tab="panel-tax" role="tab">India tax</button>
+        <button class="calc-tab" data-tab="panel-fx" role="tab">FX converter</button>
       </div>
 
       <!-- SIP -->
@@ -57,12 +75,33 @@
             <p class="muted small">Assumes monthly compounding at the start of each month. Pre-tax, pre-expense ratio.</p>
           </div>
           <div class="calc-result">
-            <h3>Future value</h3>
-            <p class="big" id="sip-future">—</p>
-            <p class="sub">After your chosen period</p>
+            <h3>Future value</h3><p class="big" id="sip-future">—</p><p class="sub">After your chosen period</p>
             <hr>
             <h3>You invest</h3><p class="big" style="font-size:1.4rem" id="sip-invested">—</p>
             <h3 style="margin-top:16px">Estimated gain</h3><p class="big" style="font-size:1.4rem" id="sip-gain">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step-up SIP -->
+      <div id="panel-sup" class="calc-panel" style="display:none">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">Step-up SIP</h2>
+            <p class="muted small">Increase your monthly investment by a fixed % every year as your salary grows.</p>
+            <form id="sup-form" onsubmit="return false">
+              <div class="field"><div class="row-flex"><label for="sup-amt">Starting monthly SIP</label><span class="value" id="sup-amt-lbl">₹10,000</span></div><input id="sup-amt" type="range" min="500" max="200000" step="500" value="10000"></div>
+              <div class="field"><div class="row-flex"><label for="sup-yrs">Duration</label><span class="value" id="sup-yrs-lbl">20 yrs</span></div><input id="sup-yrs" type="range" min="1" max="40" step="1" value="20"></div>
+              <div class="field"><div class="row-flex"><label for="sup-rate">Expected return</label><span class="value" id="sup-rate-lbl">12%</span></div><input id="sup-rate" type="range" min="1" max="25" step="0.5" value="12"></div>
+              <div class="field"><div class="row-flex"><label for="sup-step">Annual step-up</label><span class="value" id="sup-step-lbl">10%</span></div><input id="sup-step" type="range" min="0" max="25" step="1" value="10"></div>
+            </form>
+            <p class="muted small">A 10% yearly step-up doubles your contribution every ~7 years. Massive impact on the final corpus.</p>
+          </div>
+          <div class="calc-result">
+            <h3>Future value</h3><p class="big" id="sup-future">—</p><p class="sub">After your chosen period</p>
+            <hr>
+            <h3>Total invested</h3><p class="big" style="font-size:1.4rem" id="sup-invested">—</p>
+            <h3 style="margin-top:16px">Estimated gain</h3><p class="big" style="font-size:1.4rem" id="sup-gain">—</p>
           </div>
         </div>
       </div>
@@ -75,14 +114,13 @@
             <p class="muted small">Monthly instalment on a home, car, or personal loan.</p>
             <form id="emi-form" onsubmit="return false">
               <div class="field"><div class="row-flex"><label for="emi-amt">Loan amount</label><span class="value" id="emi-amt-lbl">₹50,00,000</span></div><input id="emi-amt" type="range" min="100000" max="50000000" step="100000" value="5000000"></div>
-              <div class="field"><div class="row-flex"><label for="emi-rate">Interest rate (annual)</label><span class="value" id="emi-rate-lbl">9%</span></div><input id="emi-rate" type="range" min="5" max="20" step="0.1" value="9"></div>
+              <div class="field"><div class="row-flex"><label for="emi-rate">Interest rate</label><span class="value" id="emi-rate-lbl">9%</span></div><input id="emi-rate" type="range" min="5" max="20" step="0.1" value="9"></div>
               <div class="field"><div class="row-flex"><label for="emi-yrs">Tenure</label><span class="value" id="emi-yrs-lbl">20 yrs</span></div><input id="emi-yrs" type="range" min="1" max="30" step="1" value="20"></div>
             </form>
             <div class="callout small"><strong>Tip:</strong> A 1% lower rate or 5 fewer years can save you lakhs in interest. Always check pre-payment terms before signing.</div>
           </div>
           <div class="calc-result">
-            <h3>Monthly EMI</h3><p class="big" id="emi-monthly">—</p>
-            <p class="sub">Equal each month for the full tenure</p>
+            <h3>Monthly EMI</h3><p class="big" id="emi-monthly">—</p><p class="sub">Equal each month for the full tenure</p>
             <hr>
             <h3>Total payable</h3><p class="big" style="font-size:1.4rem" id="emi-total">—</p>
             <h3 style="margin-top:16px">Total interest</h3><p class="big" style="font-size:1.4rem" id="emi-interest">—</p>
@@ -100,16 +138,55 @@
               <div class="field"><div class="row-flex"><label for="ret-current-age">Current age</label><span class="value" id="ret-current-age-lbl">30 yrs</span></div><input id="ret-current-age" type="range" min="18" max="60" step="1" value="30"></div>
               <div class="field"><div class="row-flex"><label for="ret-age">Retirement age</label><span class="value" id="ret-age-lbl">60 yrs</span></div><input id="ret-age" type="range" min="40" max="75" step="1" value="60"></div>
               <div class="field"><div class="row-flex"><label for="ret-monthly">Monthly investment</label><span class="value" id="ret-monthly-lbl">₹20,000</span></div><input id="ret-monthly" type="range" min="1000" max="500000" step="1000" value="20000"></div>
-              <div class="field"><div class="row-flex"><label for="ret-rate">Expected return (annual)</label><span class="value" id="ret-rate-lbl">11%</span></div><input id="ret-rate" type="range" min="1" max="20" step="0.5" value="11"></div>
+              <div class="field"><div class="row-flex"><label for="ret-rate">Expected return</label><span class="value" id="ret-rate-lbl">11%</span></div><input id="ret-rate" type="range" min="1" max="20" step="0.5" value="11"></div>
             </form>
             <p class="muted small">Doesn't include inflation. ₹1 crore in 30 years is worth roughly ₹23 lakh today at 5% inflation.</p>
           </div>
           <div class="calc-result">
-            <h3>Retirement corpus</h3><p class="big" id="ret-corpus">—</p>
-            <p class="sub">In <span id="ret-years">30 years</span></p>
+            <h3>Retirement corpus</h3><p class="big" id="ret-corpus">—</p><p class="sub">In <span id="ret-years">30 years</span></p>
             <hr>
             <h3>You invest</h3><p class="big" style="font-size:1.4rem" id="ret-invested">—</p>
             <h3 style="margin-top:16px">Estimated gain</h3><p class="big" style="font-size:1.4rem" id="ret-gain">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tax -->
+      <div id="panel-tax" class="calc-panel" style="display:none">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">India capital-gains tax — quick estimator</h2>
+            <p class="muted small">Approximate tax on a single sale. Based on the FY25–26 regime. Verify with a CA for filing.</p>
+            <form id="tax-form" onsubmit="return false">
+              <div class="field"><label for="tax-asset">Asset</label><select id="tax-asset"><option value="listed_eq">Listed equity / equity MF</option><option value="debt_mf">Debt mutual fund</option><option value="crypto">Crypto / VDA</option><option value="us_stocks">US / foreign stocks</option><option value="gold">Gold / physical / SGB</option></select></div>
+              <div class="field"><label for="tax-gain">Realised gain (₹)</label><input id="tax-gain" type="number" min="0" step="1000" value="500000"></div>
+              <div class="field"><label for="tax-holding">Holding period (months)</label><input id="tax-holding" type="number" min="0" step="1" value="18"></div>
+              <div class="field" id="tax-slab-row" style="display:none"><label for="tax-slab">Your income-tax slab (%)</label><input id="tax-slab" type="number" min="0" max="42.7" step="0.1" value="30"></div>
+            </form>
+            <p class="muted small">Does not include cess, STT, surcharge, exemptions, or set-off of losses.</p>
+          </div>
+          <div class="calc-result">
+            <h3>Estimated tax</h3>
+            <div id="tax-out"><p class="big">—</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FX -->
+      <div id="panel-fx" class="calc-panel" style="display:none">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">FX converter</h2>
+            <p class="muted small">Live mid-market rates from exchangerate.host (free, no key). For actual remittance always check your bank.</p>
+            <form id="fx-form" onsubmit="return false">
+              <div class="field"><label for="fx-amt">Amount</label><input id="fx-amt" type="number" min="0" step="0.01" value="1000"></div>
+              <div class="field"><label for="fx-from">From</label><select id="fx-from"><option>USD</option><option>EUR</option><option>GBP</option><option selected>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
+              <div class="field"><label for="fx-to">To</label><select id="fx-to"><option selected>USD</option><option>EUR</option><option>GBP</option><option>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
+            </form>
+          </div>
+          <div class="calc-result">
+            <h3>Converted amount</h3><p class="big" id="fx-out">—</p>
+            <p class="sub" id="fx-rate">—</p><p class="sub" id="fx-stamp" style="opacity:.5"></p>
           </div>
         </div>
       </div>
