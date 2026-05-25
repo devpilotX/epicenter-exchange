@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>XIRR vs CAGR: Which One Actually Measures Your Returns? — Epicenter Exchange</title>
+  <meta name="description" content="CAGR and XIRR sound similar but tell different stories. Here's exactly when to use each, with worked examples.">
+  <meta property="og:title" content="XIRR vs CAGR: Which One Actually Measures Your Returns?">
+  <meta property="og:type" content="article">
+  <link rel="canonical" href="https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "XIRR vs CAGR: Which One Actually Measures Your Returns?",
+    "datePublished": "2026-05-25",
+    "author": { "@type": "Organization", "name": "Epicenter Exchange" },
+    "publisher": { "@type": "Organization", "name": "Epicenter Exchange" }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="brand"><img src="/assets/img/logo.svg" alt="Epicenter Exchange" height="40"></a>
+    <nav class="site-nav">
+      <a href="/about.html">About</a>
+      <a href="/services.html">Services</a>
+      <a href="/markets.html">Markets</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/signals.html">Signals</a>
+      <a href="/insights.html">Insights</a>
+      <a href="/contact.html" class="btn btn-primary">Contact</a>
+    </nav>
+  </header>
+
+  <main class="prose container">
+    <p class="muted small"><a href="/insights.html">← Insights</a></p>
+    <h1>XIRR vs CAGR: Which One Actually Measures Your Returns?</h1>
+    <p class="muted">25 May 2026 · 7 min read · Educational</p>
+
+    <div class="callout warn">
+      <strong>Not investment advice.</strong> This article explains return metrics, not which fund to buy.
+    </div>
+
+    <h2>The 30-second answer</h2>
+    <ul>
+      <li><strong>CAGR</strong> = how a <em>single</em> lump-sum investment grew, annualised.</li>
+      <li><strong>XIRR</strong> = how a <em>series</em> of irregular cash flows grew, annualised.</li>
+      <li>If you have a SIP, EMI prepayments, additional top-ups, or partial withdrawals — you need XIRR. CAGR will mislead you.</li>
+    </ul>
+
+    <h2>CAGR — the simple case</h2>
+    <p><strong>Formula:</strong> <code>CAGR = (Final / Initial)^(1/years) − 1</code></p>
+    <p>Example: you invested ₹1,00,000 in Jan 2020. It is worth ₹1,76,234 in Jan 2026 (6 years).</p>
+    <p>CAGR = (1,76,234 / 1,00,000)^(1/6) − 1 = <strong>9.94%</strong>.</p>
+    <p>This is correct. It says: “if this had grown at a constant 9.94% per year for 6 years, it would have reached the same final value.”</p>
+
+    <h2>Where CAGR breaks</h2>
+    <p>The moment you add more money mid-way — or pull some out — CAGR becomes nonsense, because the formula assumes a single deposit at the start.</p>
+
+    <p>Example: SIP of ₹10,000/month for 5 years (₹6 lakh total invested), ending value ₹8,40,000. People often compute (8.4 / 6)^(1/5) − 1 = 6.96% and call it CAGR. <strong>This is wrong.</strong> Your last installment was invested for one month, not five years. The actual money-weighted return is closer to 13–14%.</p>
+
+    <h2>XIRR — the right tool</h2>
+    <p>XIRR (Extended Internal Rate of Return) is the discount rate that makes the net present value of all cash flows (in and out) equal to zero. It correctly accounts for <em>when</em> each rupee entered or left.</p>
+
+    <p>Spreadsheet syntax:</p>
+    <pre><code>=XIRR(values, dates)</code></pre>
+    <p>where <code>values</code> is a column of cash flows (outflows as negative, inflows as positive, ending value as a positive on the last date), and <code>dates</code> is the matching column of dates.</p>
+
+    <h2>Worked example, side by side</h2>
+    <table>
+      <colgroup><col><col><col></colgroup>
+      <tr><td><strong>Date</strong></td><td><strong>Cash flow (₹)</strong></td><td><strong>Comment</strong></td></tr>
+      <tr><td>01-Jan-2021</td><td>– 1,20,000</td><td>SIP of 10k for first year (simplified to annual)</td></tr>
+      <tr><td>01-Jan-2022</td><td>– 1,20,000</td><td>Year 2 SIP</td></tr>
+      <tr><td>01-Jan-2023</td><td>– 1,20,000</td><td>Year 3</td></tr>
+      <tr><td>01-Jan-2024</td><td>– 1,20,000</td><td>Year 4</td></tr>
+      <tr><td>01-Jan-2025</td><td>– 1,20,000</td><td>Year 5</td></tr>
+      <tr><td>01-Jan-2026</td><td>+ 8,40,000</td><td>Final corpus</td></tr>
+    </table>
+    <ul>
+      <li>Total invested: ₹6,00,000</li>
+      <li>Final value: ₹8,40,000</li>
+      <li>Total gain: ₹2,40,000 (40% absolute)</li>
+      <li>Naive CAGR: (8.4/6)^(1/5) − 1 = <strong>6.96%</strong> ❌</li>
+      <li>True XIRR: ≈ <strong>13.4%</strong> ✅</li>
+    </ul>
+    <p>If you used the naive CAGR you would seriously underestimate the fund’s performance.</p>
+
+    <h2>When does each metric belong?</h2>
+    <table>
+      <colgroup><col><col></colgroup>
+      <tr><td><strong>Use CAGR when…</strong></td><td><strong>Use XIRR when…</strong></td></tr>
+      <tr><td>A single lump sum, no top-ups, no withdrawals</td><td>Any SIP / STP / SWP situation</td></tr>
+      <tr><td>Comparing index returns (e.g., NIFTY did 12% CAGR)</td><td>Measuring <em>your personal</em> portfolio return</td></tr>
+      <tr><td>A fund’s NAV history over a period</td><td>Real estate with rental income + repairs + sale</td></tr>
+      <tr><td>A bond held to maturity</td><td>EPF, PPF with annual contributions</td></tr>
+    </table>
+
+    <h2>Common mistakes we see</h2>
+    <ul>
+      <li><strong>Mixing scheme CAGR with personal XIRR.</strong> A fund’s 15% CAGR is not the 15% <em>you</em> earned via SIP — your XIRR will be different.</li>
+      <li><strong>Forgetting the sign convention.</strong> Outflows must be negative, inflows positive. Excel will silently return wrong answers if you flip them.</li>
+      <li><strong>Ignoring taxes and exit loads.</strong> Apply XIRR to <em>post-tax</em> cash flows for the real picture.</li>
+      <li><strong>Comparing 1-year XIRR to long-term equity CAGR.</strong> Short-window XIRRs are noisy.</li>
+    </ul>
+
+    <h2>Try it yourself</h2>
+    <p>Our <a href="/tools.html">SIP calculator</a> uses the same money-weighted logic XIRR is built on. You can plug in your own numbers and see how the answer changes when you shift contributions.</p>
+
+    <hr>
+    <p class="muted small">Educational only. Epicenter Exchange is not a SEBI registered investment adviser.</p>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Epicenter Exchange · <a href="/disclaimer.html">Disclaimer</a> · <a href="/privacy.html">Privacy</a> · <a href="/cookies.html">Cookies</a></p>
+  </footer>
+</body>
+</html>

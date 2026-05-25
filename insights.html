@@ -1,14 +1,75 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Insights — Epicenter Exchange</title><meta name="description" content="Educational articles on personal finance, markets, and quantitative strategies."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
-<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html">Services</a><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a><a href="insights.html" class="active">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
-<section class="hero"><div class="container" style="max-width:780px"><span class="chip">Insights</span><h1 class="display">Read, learn, decide for yourself.</h1><p class="lede" style="margin-top:1rem">Long-form educational articles. No clickbait, no recommendations.</p></div></section>
-<section><div class="container"><div class="grid-3">
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Personal finance · 6 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">XIRR vs CAGR: which one really matters for SIP investors?</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">SIP returns can't be measured with simple CAGR. Here's why XIRR is the correct lens, with worked examples.</p></article>
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Quant · 10 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">A 50/200 SMA crossover on NIFTY: 20 years of out-of-sample backtest.</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">The famous “golden cross” — does it actually beat buy-and-hold? Spoiler: barely, and only after costs.</p></article>
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Crypto · 7 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">Why mean-reversion fails on trending crypto, with code.</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">An RSI mean-reversion strategy applied to BTC, with full Python backtest and the lessons it teaches.</p></article>
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Tax · 5 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">LTCG harvesting in India — a worked example.</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">The ₹1 lakh exemption explained, with a year-end checklist.</p></article>
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Risk · 8 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">Sharpe, Sortino, and Calmar — which to use when?</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">Risk-adjusted return metrics demystified for everyday investors.</p></article>
-<article class="card"><div style="font-size:.78rem;color:var(--muted)">Behaviour · 4 min</div><h3 class="display" style="font-size:1.2rem;color:var(--navy);margin-top:.4rem">The five biases that cost retail investors the most.</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:.6rem">Recency, anchoring, loss-aversion, herding, and overconfidence — illustrated with charts.</p></article>
-</div><div class="callout" style="margin-top:2.5rem"><strong>Articles coming soon.</strong> The titles above are placeholders for the publishing pipeline. Want one prioritised? Use the contact form.</div></div></section>
-<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
-<script src="assets/js/main.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Insights — Epicenter Exchange</title>
+  <meta name="description" content="Long-form, data-driven essays on Indian markets, US/UK equities, crypto cycles, and personal-finance math. Educational, no hype.">
+  <meta property="og:title" content="Insights — Epicenter Exchange">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://epicenterexchange.com/insights.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="brand"><img src="/assets/img/logo.svg" alt="Epicenter Exchange" height="40"></a>
+    <nav class="site-nav">
+      <a href="/about.html">About</a>
+      <a href="/services.html">Services</a>
+      <a href="/markets.html">Markets</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/signals.html">Signals</a>
+      <a href="/insights.html" aria-current="page">Insights</a>
+      <a href="/contact.html" class="btn btn-primary">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero hero-narrow">
+      <h1>Insights</h1>
+      <p class="lede">Slow, data-grounded essays. No hot takes. No “guaranteed returns.”</p>
+    </section>
+
+    <section class="article-grid">
+      <article class="card article-card">
+        <p class="tag">India · Mutual Funds</p>
+        <h2><a href="/insights/sip-vs-lumpsum-india-2026.html">SIP vs Lump Sum in 2026: What the Data Actually Says</a></h2>
+        <p>25 years of NIFTY 50 history compared head-to-head. The honest answer almost no blog gives you.</p>
+        <p class="muted small">9 min read · 25 May 2026</p>
+      </article>
+
+      <article class="card article-card">
+        <p class="tag">Crypto · Bitcoin</p>
+        <h2><a href="/insights/bitcoin-halving-cycles-explained.html">Bitcoin Halving Cycles: What the 4 Cycles Actually Tell Us</a></h2>
+        <p>Why each cycle’s gain has shrunk — and why a sample size of 3 isn’t a pattern.</p>
+        <p class="muted small">8 min read · 25 May 2026</p>
+      </article>
+
+      <article class="card article-card">
+        <p class="tag">Personal Finance · Math</p>
+        <h2><a href="/insights/xirr-vs-cagr-which-matters.html">XIRR vs CAGR: Which One Actually Measures Your Returns?</a></h2>
+        <p>The metric most people quote is the wrong one. A worked example shows the gap can be ~6 percentage points.</p>
+        <p class="muted small">7 min read · 25 May 2026</p>
+      </article>
+    </section>
+
+    <section class="newsletter-block">
+      <h2>Get one essay a fortnight</h2>
+      <p>No trading signals. No tips. Just slow, honest writing on markets and money. Unsubscribe in one click.</p>
+      <form action="https://buttondown.email/api/emails/embed-subscribe/YOUR_BUTTONDOWN_USERNAME" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/YOUR_BUTTONDOWN_USERNAME', 'popupwindow')" class="newsletter-form">
+        <label for="bd-email" class="sr-only">Email</label>
+        <input id="bd-email" type="email" name="email" placeholder="you@example.com" required>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+      <p class="muted small">Powered by Buttondown. See <a href="/privacy.html">privacy policy</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Epicenter Exchange · <a href="/disclaimer.html">Disclaimer</a> · <a href="/privacy.html">Privacy</a> · <a href="/cookies.html">Cookies</a></p>
+    <p class="muted small">Educational only. Not investment advice. Not SEBI / SEC / FCA registered.</p>
+  </footer>
+</body>
+</html>

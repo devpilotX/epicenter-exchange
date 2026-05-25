@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48">
+  <rect x="0" y="4" width="40" height="40" rx="8" fill="#0B1F3A"/>
+  <path d="M8 34 L16 22 L22 28 L30 14 L34 20" stroke="#C9A227" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="34" cy="20" r="2.5" fill="#C9A227"/>
+  <text x="52" y="24" font-family="'Fraunces', Georgia, serif" font-size="18" font-weight="700" fill="#0B1F3A">Epicenter</text>
+  <text x="52" y="40" font-family="'Inter', sans-serif" font-size="11" letter-spacing="2" fill="#64748B">EXCHANGE</text>
+</svg>
