@@ -1,3 +1,4 @@
+@import url('./additions.css');
 :root{
   --navy:#0B1F3A; --navy-700:#13315C; --gold:#C9A227;
   --ink:#0F172A; --muted:#64748B; --surface:#F8FAFC;
@@ -27,6 +28,15 @@ header.nav .logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;c
 header.nav .logo span{color:var(--gold)}
 header.nav nav a{font-size:.92rem;color:var(--muted);font-weight:500;margin:0 .9rem}
 header.nav nav a:hover,header.nav nav a.active{color:var(--navy)}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:50}
+.site-header .brand{display:inline-flex;align-items:center}
+.site-nav{display:flex;align-items:center;gap:18px}
+.site-nav a{color:var(--muted);font-weight:500;font-size:.95rem}
+.site-nav a:hover,.site-nav a[aria-current="page"]{color:var(--navy)}
+.site-footer{padding:32px 24px;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.9rem}
+.site-footer p{margin:.3rem 0}
+.small{font-size:.85rem}
+.muted{color:var(--muted)}
 .hero{padding:5rem 0 6rem}
 .hero h1{font-size:clamp(2.4rem,5.5vw,4.5rem);font-weight:700;line-height:1.05;color:var(--navy);margin:1rem 0}
 .hero h1 em{font-style:normal;color:var(--gold)}
