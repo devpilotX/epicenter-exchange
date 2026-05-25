@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Contact — Epicenter Exchange</title><meta name="description" content="Reach out via this contact form. The only way to interact with this site."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
+<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html">Services</a><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a><a href="insights.html">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
+<section class="hero"><div class="container" style="max-width:680px"><span class="chip">Contact</span><h1 class="display">One form. No support team.</h1><p class="lede" style="margin-top:1rem">This is the only way to interact with the site. Best-effort replies, general questions only — never personalised advice.</p></div></section>
+<section><div class="container" style="max-width:680px">
+<!-- Replace YOUR_FORMSPREE_ID with a free Formspree endpoint, or change action to a mailto: link -->
+<form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" class="card">
+<div class="field"><label>Your name</label><input name="name" required/></div>
+<div class="field"><label>Your email</label><input type="email" name="email" required/></div>
+<div class="field"><label>Topic</label><select name="topic"><option>General question</option><option>Algo / code question</option><option>Article suggestion</option><option>Bug report</option><option>Other</option></select></div>
+<div class="field"><label>Message</label><textarea name="message" rows="6" required></textarea></div>
+<div class="field"><label style="display:flex;gap:.5rem;font-size:.85rem;color:var(--muted)"><input type="checkbox" required/> I understand this site does not provide investment advice and I will not share personal financial details.</label></div>
+<button class="btn btn-primary" type="submit">Send message</button>
+</form>
+<div class="callout" style="margin-top:2rem"><strong>Setup note:</strong> Replace <code>YOUR_FORMSPREE_ID</code> in this file with a free Formspree (formspree.io) endpoint, or change the form action to <code>mailto:you@yourdomain.com</code> for a no-backend option.</div>
+</div></section>
+<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
+<script src="assets/js/main.js"></script></body></html>
