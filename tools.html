@@ -1,22 +1,131 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Free Tools — Epicenter Exchange</title><meta name="description" content="Free SIP, EMI, and retirement calculators. No signup, no email."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
-<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html">Services</a><a href="markets.html">Markets</a><a href="tools.html" class="active">Tools</a><a href="signals.html">Signals</a><a href="insights.html">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
-<section class="hero"><div class="container" style="max-width:780px"><span class="chip">Free tools</span><h1 class="display">Plan in 30 seconds.</h1><p class="lede" style="margin-top:1rem">All calculations run entirely in your browser. We do not store any inputs.</p></div></section>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tools — SIP, EMI &amp; Retirement Calculators · Epicenter Exchange</title>
+  <meta name="description" content="Free, working SIP, EMI, and retirement calculators with proper money-weighted math. Inputs save in your browser. No login, no tracking.">
+  <link rel="canonical" href="https://epicenterexchange.com/tools.html">
+  <meta property="og:title" content="Free SIP, EMI &amp; Retirement Calculators">
+  <meta property="og:description" content="Working calculators with proper money-weighted math. No login.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://epicenterexchange.com/tools.html">
+  <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/calculators.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="row">
+  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+</div></header>
 
-<section><div class="container"><h2 style="font-size:1.8rem">SIP Calculator</h2><div class="calc-grid" style="margin-top:1.5rem">
-<div class="card"><div class="field"><label>Monthly investment (₹)</label><input type="number" id="sip-amount" value="10000"/></div><div class="field"><label>Expected annual return (%)</label><input type="number" id="sip-rate" value="12" step="0.1"/></div><div class="field"><label>Years</label><input type="number" id="sip-years" value="20"/></div><button class="btn btn-primary" onclick="sip()">Calculate</button></div>
-<div class="result-card"><div style="font-size:.8rem;color:rgba(255,255,255,.7)">Estimated future value</div><div class="big" id="sip-fv">₹ —</div><div style="font-size:.85rem;color:rgba(255,255,255,.7)">Invested: <span id="sip-inv">—</span> · Gain: <span id="sip-gain">—</span></div></div>
-</div></div></section>
+<main>
+  <section class="hero hero-narrow">
+    <div class="container">
+      <span class="chip">Tools</span>
+      <h1>Three calculators. Real math.</h1>
+      <p class="lede">Built on the same money-weighted (XIRR-style) formulas a fee-only adviser would use. Drag the sliders and watch the numbers update live. Nothing is stored on a server.</p>
+    </div>
+  </section>
 
-<section class="surface"><div class="container"><h2 style="font-size:1.8rem">EMI Calculator</h2><div class="calc-grid" style="margin-top:1.5rem">
-<div class="card"><div class="field"><label>Loan amount (₹)</label><input type="number" id="emi-principal" value="5000000"/></div><div class="field"><label>Interest rate (% p.a.)</label><input type="number" id="emi-rate" value="8.5" step="0.05"/></div><div class="field"><label>Tenure (years)</label><input type="number" id="emi-years" value="20"/></div><button class="btn btn-primary" onclick="emi()">Calculate</button></div>
-<div class="result-card"><div style="font-size:.8rem;color:rgba(255,255,255,.7)">Monthly EMI</div><div class="big" id="emi-monthly">₹ —</div><div style="font-size:.85rem;color:rgba(255,255,255,.7)">Total paid: <span id="emi-total">—</span> · Interest: <span id="emi-interest">—</span></div></div>
-</div></div></section>
+  <section style="padding-top:24px">
+    <div class="container">
+      <div class="calc-tabs" role="tablist">
+        <button class="calc-tab active" data-tab="panel-sip" role="tab">SIP Calculator</button>
+        <button class="calc-tab" data-tab="panel-emi" role="tab">EMI Calculator</button>
+        <button class="calc-tab" data-tab="panel-ret" role="tab">Retirement Planner</button>
+      </div>
 
-<section><div class="container"><h2 style="font-size:1.8rem">Retirement Corpus</h2><div class="calc-grid" style="margin-top:1.5rem">
-<div class="card"><div class="field"><label>Current monthly expense (₹)</label><input type="number" id="ret-expense" value="50000"/></div><div class="field"><label>Years until retirement</label><input type="number" id="ret-years" value="25"/></div><div class="field"><label>Expected inflation (%)</label><input type="number" id="ret-infl" value="6" step="0.1"/></div><button class="btn btn-primary" onclick="retire()">Calculate</button></div>
-<div class="result-card"><div style="font-size:.8rem;color:rgba(255,255,255,.7)">Corpus needed (4% rule)</div><div class="big" id="ret-corpus">₹ —</div><div style="font-size:.85rem;color:rgba(255,255,255,.7)">Future monthly expense: <span id="ret-future">—</span></div></div>
-</div><div class="callout" style="margin-top:2.5rem"><strong>Educational only.</strong> These calculators use simple compounding formulas. They ignore taxes, fees, market volatility, and individual circumstances. Consult a licensed adviser before making real decisions.</div></div></section>
+      <!-- SIP -->
+      <div id="panel-sip" class="calc-panel">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">SIP — Systematic Investment Plan</h2>
+            <p class="muted small">How much can a monthly investment compound to over time?</p>
+            <form id="sip-form" onsubmit="return false">
+              <div class="field"><div class="row-flex"><label for="sip-amt">Monthly investment</label><span class="value" id="sip-amt-lbl">₹10,000</span></div><input id="sip-amt" type="range" min="500" max="200000" step="500" value="10000"></div>
+              <div class="field"><div class="row-flex"><label for="sip-yrs">Duration</label><span class="value" id="sip-yrs-lbl">15 yrs</span></div><input id="sip-yrs" type="range" min="1" max="40" step="1" value="15"></div>
+              <div class="field"><div class="row-flex"><label for="sip-rate">Expected return (annual)</label><span class="value" id="sip-rate-lbl">12%</span></div><input id="sip-rate" type="range" min="1" max="25" step="0.5" value="12"></div>
+            </form>
+            <p class="muted small">Assumes monthly compounding at the start of each month. Pre-tax, pre-expense ratio.</p>
+          </div>
+          <div class="calc-result">
+            <h3>Future value</h3>
+            <p class="big" id="sip-future">—</p>
+            <p class="sub">After your chosen period</p>
+            <hr>
+            <h3>You invest</h3><p class="big" style="font-size:1.4rem" id="sip-invested">—</p>
+            <h3 style="margin-top:16px">Estimated gain</h3><p class="big" style="font-size:1.4rem" id="sip-gain">—</p>
+          </div>
+        </div>
+      </div>
 
-<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
-<script src="assets/js/main.js"></script><script src="assets/js/calculators.js"></script></body></html>
+      <!-- EMI -->
+      <div id="panel-emi" class="calc-panel" style="display:none">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">EMI — Loan Calculator</h2>
+            <p class="muted small">Monthly instalment on a home, car, or personal loan.</p>
+            <form id="emi-form" onsubmit="return false">
+              <div class="field"><div class="row-flex"><label for="emi-amt">Loan amount</label><span class="value" id="emi-amt-lbl">₹50,00,000</span></div><input id="emi-amt" type="range" min="100000" max="50000000" step="100000" value="5000000"></div>
+              <div class="field"><div class="row-flex"><label for="emi-rate">Interest rate (annual)</label><span class="value" id="emi-rate-lbl">9%</span></div><input id="emi-rate" type="range" min="5" max="20" step="0.1" value="9"></div>
+              <div class="field"><div class="row-flex"><label for="emi-yrs">Tenure</label><span class="value" id="emi-yrs-lbl">20 yrs</span></div><input id="emi-yrs" type="range" min="1" max="30" step="1" value="20"></div>
+            </form>
+            <div class="callout small"><strong>Tip:</strong> A 1% lower rate or 5 fewer years can save you lakhs in interest. Always check pre-payment terms before signing.</div>
+          </div>
+          <div class="calc-result">
+            <h3>Monthly EMI</h3><p class="big" id="emi-monthly">—</p>
+            <p class="sub">Equal each month for the full tenure</p>
+            <hr>
+            <h3>Total payable</h3><p class="big" style="font-size:1.4rem" id="emi-total">—</p>
+            <h3 style="margin-top:16px">Total interest</h3><p class="big" style="font-size:1.4rem" id="emi-interest">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retirement -->
+      <div id="panel-ret" class="calc-panel" style="display:none">
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h2 style="margin-top:0;font-size:1.4rem">Retirement Planner</h2>
+            <p class="muted small">How big will the corpus be when you retire?</p>
+            <form id="ret-form" onsubmit="return false">
+              <div class="field"><div class="row-flex"><label for="ret-current-age">Current age</label><span class="value" id="ret-current-age-lbl">30 yrs</span></div><input id="ret-current-age" type="range" min="18" max="60" step="1" value="30"></div>
+              <div class="field"><div class="row-flex"><label for="ret-age">Retirement age</label><span class="value" id="ret-age-lbl">60 yrs</span></div><input id="ret-age" type="range" min="40" max="75" step="1" value="60"></div>
+              <div class="field"><div class="row-flex"><label for="ret-monthly">Monthly investment</label><span class="value" id="ret-monthly-lbl">₹20,000</span></div><input id="ret-monthly" type="range" min="1000" max="500000" step="1000" value="20000"></div>
+              <div class="field"><div class="row-flex"><label for="ret-rate">Expected return (annual)</label><span class="value" id="ret-rate-lbl">11%</span></div><input id="ret-rate" type="range" min="1" max="20" step="0.5" value="11"></div>
+            </form>
+            <p class="muted small">Doesn't include inflation. ₹1 crore in 30 years is worth roughly ₹23 lakh today at 5% inflation.</p>
+          </div>
+          <div class="calc-result">
+            <h3>Retirement corpus</h3><p class="big" id="ret-corpus">—</p>
+            <p class="sub">In <span id="ret-years">30 years</span></p>
+            <hr>
+            <h3>You invest</h3><p class="big" style="font-size:1.4rem" id="ret-invested">—</p>
+            <h3 style="margin-top:16px">Estimated gain</h3><p class="big" style="font-size:1.4rem" id="ret-gain">—</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout danger mt-12"><strong>These are projections, not promises.</strong> Real-world returns are not constant; markets crash; expense ratios, taxes, and inflation reduce what you actually keep. Use the numbers as a sanity check, not a forecast.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div><div class="footer-brand">Epicenter <span>Exchange</span></div><p class="small">Markets, math, and decisions — without the hype. Educational platform. Not investment advice.</p></div>
+    <div><h4>Explore</h4><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a></div>
+    <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
+    <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
+  </div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+</footer>
+</body></html>

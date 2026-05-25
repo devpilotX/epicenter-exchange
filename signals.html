@@ -1,24 +1,103 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Algo Signal Demos — Epicenter Exchange</title><meta name="description" content="Open-source Python signal demos for SMA, RSI, MACD, mean-reversion, and momentum across multiple markets. Educational only."/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet"/><link rel="stylesheet" href="assets/css/style.css"/></head><body>
-<header class="nav"><div class="container row"><a class="logo" href="index.html">Epicenter<span>.</span></a><nav class="desktop-only"><a href="index.html">Home</a><a href="services.html">Services</a><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html" class="active">Signals</a><a href="insights.html">Insights</a><a href="about.html">About</a></nav><a class="btn btn-primary" href="contact.html">Contact</a></div></header>
-<section class="hero"><div class="container" style="max-width:820px"><span class="chip">Open-source · Educational</span><h1 class="display">Algo signal demos for learning.</h1><p class="lede" style="margin-top:1rem">Classic technical strategies in clean Python — read the code, run the backtests, see what works and what doesn't.</p><div class="callout" style="margin-top:2rem"><strong>No strategy is 100% accurate.</strong> Anyone claiming “guaranteed” signals is misleading you (and likely breaking SEBI/SEC/FCA rules). These demos exist to <em>teach</em> how strategies work, including their failure modes. Do not trade real money based on them.</div></div></section>
-<section><div class="container"><h2 style="font-size:1.6rem">Simple signals</h2><div class="grid-3" style="margin-top:1.5rem">
-<div class="card"><div class="icon">1</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">SMA Crossover (50/200)</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">The classic trend-following “golden cross” / “death cross.” Works on indices, fails on choppy stocks.</p><p class="mono" style="font-size:.78rem;color:var(--muted);margin-top:.8rem">python simple_signals.py --strategy sma</p></div>
-<div class="card"><div class="icon">2</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">RSI Mean-Reversion</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">Buy when RSI &lt; 30, sell when RSI &gt; 70. Decent on range-bound equity; bad in strong trends.</p><p class="mono" style="font-size:.78rem;color:var(--muted);margin-top:.8rem">python simple_signals.py --strategy rsi</p></div>
-<div class="card"><div class="icon">3</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">MACD Histogram</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">12/26 EMA difference with 9-period signal line. Trend-confirmation tool, not a holy grail.</p><p class="mono" style="font-size:.78rem;color:var(--muted);margin-top:.8rem">python simple_signals.py --strategy macd</p></div>
-</div>
-<h2 style="font-size:1.6rem;margin-top:3.5rem">Advanced signals</h2><div class="grid-3" style="margin-top:1.5rem">
-<div class="card"><div class="icon">A</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">Bollinger + Z-Score Mean Reversion</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">Trade extremes of the price-to-mean z-score with a 20-day window. Good intuition builder.</p></div>
-<div class="card"><div class="icon">B</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">12-1 Cross-Sectional Momentum</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">Rank a basket on trailing 12-month minus 1-month return; long top decile, short bottom. Classic academic factor.</p></div>
-<div class="card"><div class="icon">C</div><h3 class="display" style="font-size:1.15rem;color:var(--navy)">ATR-Based Position Sizing</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.6">Size positions so each one risks the same fraction of capital, using ATR for volatility.</p></div>
-</div>
-<h2 style="font-size:1.6rem;margin-top:3.5rem">Where to find the code</h2><p style="color:var(--muted);margin-top:.6rem">Everything lives in the <code>/algo</code> folder on GitHub. Clone, install requirements, and run.</p><pre style="background:var(--ink);color:#fff;padding:1.25rem;border-radius:.6rem;overflow:auto;font-family:'IBM Plex Mono',monospace;font-size:.85rem;margin-top:1rem">git clone https://github.com/devpilotX/epicenter-exchange.git
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Signals — Open-source Algo Demos · Epicenter Exchange</title>
+  <meta name="description" content="Open-source, educational Python implementations of SMA, RSI, MACD, mean-reversion, momentum, and an honest backtester. MIT-licensed. Not investment advice.">
+  <link rel="canonical" href="https://epicenterexchange.com/signals.html">
+  <meta property="og:title" content="Open-source algo demos — SMA, RSI, MACD, mean-reversion">
+  <meta property="og:description" content="Educational Python implementations with an honest backtester.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://epicenterexchange.com/signals.html">
+  <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="row">
+  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+</div></header>
+
+<main>
+  <section class="hero hero-narrow">
+    <div class="container">
+      <span class="chip">Signals — open-source &amp; educational</span>
+      <h1>Algos you can read.</h1>
+      <p class="lede">Textbook strategies in Python, MIT-licensed, with an honest backtester. The point is to understand how signals are constructed — not to trade them.</p>
+      <div class="hero-cta"><a href="https://github.com/devpilotX/epicenter-exchange/tree/main/algo" class="btn btn-primary" rel="noopener">View code on GitHub</a></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container" style="max-width:880px">
+      <div class="callout danger"><strong>No accuracy claims, ever.</strong> No algorithm has 100% (let alone 1000%) accuracy. Backtests carry look-ahead and survivorship bias unless you actively prevent them. Real markets add slippage, taxes, latency, and emotional pressure. <strong>This code is for learning, not trading.</strong></div>
+
+      <h2 class="mt-12">Simple signals</h2>
+      <div class="grid grid-3 mt-8">
+        <div class="card"><div class="icon">SMA</div><h3>SMA Crossover (50/200)</h3><p>The classic golden / death cross. Long when fast SMA &gt; slow SMA, flat otherwise.</p></div>
+        <div class="card"><div class="icon">RSI</div><h3>RSI(14) Mean-reversion</h3><p>Buy bias below 30, sell bias above 70. Works best on range-bound assets, fails on trends.</p></div>
+        <div class="card"><div class="icon">MACD</div><h3>MACD(12/26/9)</h3><p>Histogram zero-crossings. A smoother variant of crossover with a momentum component.</p></div>
+      </div>
+
+      <h2 class="mt-12">Advanced signals</h2>
+      <div class="grid grid-3 mt-8">
+        <div class="card"><div class="icon">Z</div><h3>Z-score mean-reversion</h3><p>Trade extremes of a 20-day price-to-mean z-score. Long at −2σ, exit near the mean.</p></div>
+        <div class="card"><div class="icon">M</div><h3>12-1 trend momentum</h3><p>12-month return minus the most recent month. Classic factor used in many quant shops.</p></div>
+        <div class="card"><div class="icon">A</div><h3>ATR position sizing</h3><p>Size positions so one ATR of price movement equals a fixed % of capital at risk.</p></div>
+      </div>
+
+      <h2 class="mt-12">Honest backtester</h2>
+      <p>The included <code>backtest.py</code> runs any signal long-only and reports total return, CAGR, annualised volatility, Sharpe ratio, max drawdown, and win rate. Signals computed on day <em>t</em> are lagged to day <em>t+1</em> to avoid look-ahead. Costs and slippage are <strong>not</strong> modelled — add them yourself before drawing conclusions.</p>
+
+      <h3 style="margin-top:24px">Quick start</h3>
+      <pre><code>git clone https://github.com/devpilotX/epicenter-exchange.git
 cd epicenter-exchange/algo
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv &amp;&amp; source .venv/bin/activate
 pip install -r requirements.txt
+
+# Today's signal on a single ticker
 python simple_signals.py --ticker RELIANCE.NS --strategy sma
-python backtest.py --ticker BTC-USD --strategy rsi</pre>
-<div class="callout" style="margin-top:2.5rem"><strong>Risk reminder:</strong> Backtests are historical simulations. They suffer from look-ahead bias, survivorship bias, transaction-cost approximations, and regime change. Real trading involves slippage, latency, taxes, and emotional pressure that backtests cannot capture.</div>
-</div></section>
-<footer><div class="container"><div class="grid"><div><div class="logo" style="font-family:Fraunces;font-size:1.5rem;font-weight:700;color:#fff">Epicenter<span style="color:var(--gold)">.</span></div><p style="margin-top:.6rem;max-width:18rem">A solo, non-profit, open-source finance education project.</p></div><div><h4>Site</h4><a href="about.html">About</a><a href="services.html">Services</a><a href="insights.html">Insights</a></div><div><h4>Resources</h4><a href="markets.html">Markets</a><a href="tools.html">Tools</a><a href="signals.html">Signals</a></div><div><h4>Legal</h4><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a><a href="https://github.com/devpilotX/epicenter-exchange">GitHub</a></div></div><div class="legal">© <span id="year"></span> Epicenter Exchange. Not investment advice.</div></div></footer>
-<script src="assets/js/main.js"></script></body></html>
+python advanced_signals.py --ticker ^NSEI --strategy meanrev
+
+# Full backtest with equity-curve plot
+python backtest.py --ticker AAPL --strategy macd --start 2005-01-01</code></pre>
+
+      <h3 style="margin-top:24px">Supported markets</h3>
+      <ul>
+        <li><strong>India NSE</strong> — <code>RELIANCE.NS</code>, <code>TCS.NS</code>, <code>INFY.NS</code>, <code>^NSEI</code>, <code>^NSEBANK</code></li>
+        <li><strong>US</strong> — <code>AAPL</code>, <code>MSFT</code>, <code>GOOGL</code>, <code>^GSPC</code>, <code>^IXIC</code></li>
+        <li><strong>UK</strong> — <code>HSBA.L</code>, <code>BP.L</code>, <code>VOD.L</code>, <code>^FTSE</code></li>
+        <li><strong>Crypto</strong> — <code>BTC-USD</code>, <code>ETH-USD</code>, <code>SOL-USD</code>, <code>BNB-USD</code></li>
+      </ul>
+
+      <h2 class="mt-12">What the strategies will and won't do</h2>
+      <table>
+        <tr><th>Will</th><th>Won't</th></tr>
+        <tr><td>Teach you how a signal is computed end-to-end.</td><td>Predict the future.</td></tr>
+        <tr><td>Show you the math behind crossovers, RSI, MACD, momentum.</td><td>Generate guaranteed profits.</td></tr>
+        <tr><td>Give you a reproducible Python project to extend.</td><td>Replace a registered investment adviser.</td></tr>
+        <tr><td>Compare strategy vs buy-and-hold honestly.</td><td>Model taxes, slippage, broker fees, or behaviour.</td></tr>
+      </table>
+
+      <p class="mt-12"><a class="btn btn-outline" href="https://github.com/devpilotX/epicenter-exchange/tree/main/algo" rel="noopener">Open the algo folder on GitHub →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div><div class="footer-brand">Epicenter <span>Exchange</span></div><p class="small">Markets, math, and decisions — without the hype. Educational platform. Not investment advice.</p></div>
+    <div><h4>Explore</h4><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a></div>
+    <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
+    <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
+  </div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+</footer>
+</body></html>
