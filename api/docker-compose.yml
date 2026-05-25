@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    container_name: epicenter-api
+    restart: unless-stopped
+    expose:
+      - "8000"
+    volumes:
+      - ./data:/data
+    environment:
+      - DB_PATH=/data/epicenter.db
+    networks:
+      - edge
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: epicenter-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - API_DOMAIN=${API_DOMAIN:-api.epicenterexchange.com}
+    depends_on:
+      - api
+    networks:
+      - edge
+
+networks:
+  edge:
+
+volumes:
+  caddy_data:
+  caddy_config:

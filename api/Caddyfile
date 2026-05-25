@@ -1,0 +1,35 @@
+# Epicenter Exchange API - Caddy reverse proxy
+# Automatic HTTPS via Let's Encrypt. Rate-limited. CORS handled by FastAPI.
+
+{$API_DOMAIN} {
+	encode zstd gzip
+
+	# Security headers
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		X-Frame-Options DENY
+		-Server
+	}
+
+	# Health endpoint without rate limit
+	handle /health {
+		reverse_proxy api:8000
+	}
+
+	# Backtest endpoint — heavier, tighter limit
+	handle /backtest* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy api:8000
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
