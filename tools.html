@@ -5,39 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tools — SIP, EMI, Tax, FX &amp; Retirement Calculators · Epicenter Exchange</title>
   <meta name="description" content="Free, working calculators: SIP, step-up SIP, EMI, retirement, India capital-gains tax estimator, and a live FX converter. Real money-weighted math. No login, no tracking.">
-  <link rel="canonical" href="https://epicenterexchange.com/tools.html">
+  <link rel="canonical" href="https://epicenterexchange.com/tools">
   <meta property="og:title" content="Free Financial Calculators">
   <meta property="og:description" content="SIP, step-up SIP, EMI, retirement, capital-gains tax, and FX. Real math, no login.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://epicenterexchange.com/tools.html">
+  <meta property="og:url" content="https://epicenterexchange.com/tools">
   <meta property="og:image" content="https://epicenterexchange.com/assets/img/og.svg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
   <link rel="manifest" href="/manifest.json">
   <link rel="alternate" type="application/rss+xml" title="Epicenter Insights" href="/feed.xml">
+  <link rel="preconnect" href="https://api.epicenterexchange.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/calculators.js"></script>
-  <script defer src="/assets/js/extras.js"></script>
-  <script type="application/ld+json">{
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://epicenterexchange.com/"},
-      {"@type":"ListItem","position":2,"name":"Tools","item":"https://epicenterexchange.com/tools.html"}
-    ]
-  }</script>
+  <script defer src="/assets/js/adsense-loader.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://epicenterexchange.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://epicenterexchange.com/tools"}]}</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="row">
-  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
+  <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="36" height="36" loading="eager" decoding="async"><span class="brand-text">Epicenter <span>Exchange</span></span></a>
   <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  <nav class="site-nav" id="site-nav"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Markets</a><a href="/tools.html" aria-current="page">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a><a href="/contact.html" class="btn btn-primary">Contact</a></nav>
+  <nav class="site-nav" id="site-nav"><a href="/about">About</a><a href="/services">Services</a><a href="/markets">Markets</a><a href="/tools" aria-current="page">Tools</a><a href="/signals">Signals</a><a href="/insights">Insights</a><a href="/contact" class="btn btn-primary">Contact</a></nav>
 </div></header>
 <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">›</span><span aria-current="page">Tools</span></nav>
 
@@ -61,7 +55,6 @@
         <button class="calc-tab" data-tab="panel-fx" role="tab">FX converter</button>
       </div>
 
-      <!-- SIP -->
       <div id="panel-sip" class="calc-panel">
         <div class="calc-grid">
           <div class="calc-form">
@@ -83,7 +76,6 @@
         </div>
       </div>
 
-      <!-- Step-up SIP -->
       <div id="panel-sup" class="calc-panel" style="display:none">
         <div class="calc-grid">
           <div class="calc-form">
@@ -106,7 +98,6 @@
         </div>
       </div>
 
-      <!-- EMI -->
       <div id="panel-emi" class="calc-panel" style="display:none">
         <div class="calc-grid">
           <div class="calc-form">
@@ -128,7 +119,6 @@
         </div>
       </div>
 
-      <!-- Retirement -->
       <div id="panel-ret" class="calc-panel" style="display:none">
         <div class="calc-grid">
           <div class="calc-form">
@@ -151,7 +141,6 @@
         </div>
       </div>
 
-      <!-- Tax -->
       <div id="panel-tax" class="calc-panel" style="display:none">
         <div class="calc-grid">
           <div class="calc-form">
@@ -172,16 +161,15 @@
         </div>
       </div>
 
-      <!-- FX -->
       <div id="panel-fx" class="calc-panel" style="display:none">
         <div class="calc-grid">
           <div class="calc-form">
             <h2 style="margin-top:0;font-size:1.4rem">FX converter</h2>
-            <p class="muted small">Live mid-market rates from exchangerate.host (free, no key). For actual remittance always check your bank.</p>
+            <p class="muted small">Live mid-market rates (161 currencies, server-cached, free). For remittance always check your bank's rate.</p>
             <form id="fx-form" onsubmit="return false">
               <div class="field"><label for="fx-amt">Amount</label><input id="fx-amt" type="number" min="0" step="0.01" value="1000"></div>
-              <div class="field"><label for="fx-from">From</label><select id="fx-from"><option>USD</option><option>EUR</option><option>GBP</option><option selected>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
-              <div class="field"><label for="fx-to">To</label><select id="fx-to"><option selected>USD</option><option>EUR</option><option>GBP</option><option>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
+              <div class="field"><label for="fx-from">From</label><select id="fx-from"><option selected>USD</option><option>EUR</option><option>GBP</option><option>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option><option>CNY</option><option>HKD</option></select></div>
+              <div class="field"><label for="fx-to">To</label><select id="fx-to"><option>USD</option><option>EUR</option><option>GBP</option><option selected>INR</option><option>JPY</option><option>AED</option><option>SGD</option><option>AUD</option><option>CAD</option><option>CHF</option><option>CNY</option><option>HKD</option></select></div>
             </form>
           </div>
           <div class="calc-result">
@@ -199,10 +187,10 @@
 <footer class="site-footer">
   <div class="footer-grid">
     <div><div class="footer-brand">Epicenter <span>Exchange</span></div><p class="small">Markets, math, and decisions — without the hype. Educational platform. Not investment advice.</p></div>
-    <div><h4>Explore</h4><a href="/markets.html">Markets</a><a href="/tools.html">Tools</a><a href="/signals.html">Signals</a><a href="/insights.html">Insights</a></div>
-    <div><h4>Company</h4><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></div>
-    <div><h4>Legal</h4><a href="/disclaimer.html">Disclaimer</a><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a></div>
+    <div><h4>Explore</h4><a href="/markets">Markets</a><a href="/tools">Tools</a><a href="/signals">Signals</a><a href="/insights">Insights</a></div>
+    <div><h4>Company</h4><a href="/about">About</a><a href="/services">Services</a><a href="/contact">Contact</a></div>
+    <div><h4>Legal</h4><a href="/disclaimer">Disclaimer</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a></div>
   </div>
-  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free, no advertising · Not SEBI / SEC / FCA registered</div>
+  <div class="footer-bottom">© <span data-year>2026</span> Epicenter Exchange · Built solo, kept free · Not SEBI / SEC / FCA registered</div>
 </footer>
 </body></html>
