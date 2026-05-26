@@ -2,39 +2,72 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
   <title>Epicenter Exchange — Insights</title>
-  <link>https://epicenterexchange.com/insights.html</link>
+  <link>https://epicenterexchange.com/insights</link>
   <atom:link href="https://epicenterexchange.com/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Slow, data-grounded essays on markets and money. One essay every fortnight. Free, ad-free, no tracking.</description>
   <language>en-IN</language>
-  <lastBuildDate>Mon, 25 May 2026 00:00:00 +0530</lastBuildDate>
+  <lastBuildDate>Tue, 26 May 2026 14:00:00 +0530</lastBuildDate>
   <image>
     <url>https://epicenterexchange.com/assets/img/icon-512.svg</url>
     <title>Epicenter Exchange</title>
     <link>https://epicenterexchange.com</link>
   </image>
   <item>
+    <title>SEBI's F&amp;O rules 18 months on: what the data actually shows</title>
+    <link>https://epicenterexchange.com/insights/sebi-fo-rules-impact-2026</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/sebi-fo-rules-impact-2026</guid>
+    <pubDate>Tue, 26 May 2026 00:00:00 +0530</pubDate>
+    <category>India</category>
+    <category>Regulation</category>
+    <description>Six measures, retail losses of ₹1.81 lakh crore, and what 18 months of post-rollout data tells us about SEBI's F&amp;O reforms. With SEBI sources.</description>
+  </item>
+  <item>
+    <title>NIFTY 50 vs S&amp;P 500: 25 years of real numbers</title>
+    <link>https://epicenterexchange.com/insights/nifty-vs-sp500-25-years</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/nifty-vs-sp500-25-years</guid>
+    <pubDate>Sun, 24 May 2026 00:00:00 +0530</pubDate>
+    <category>India</category>
+    <description>Currency-adjusted, drawdown-adjusted long-term comparison of NIFTY 50 against the S&amp;P 500 for Indian investors.</description>
+  </item>
+  <item>
+    <title>Best tax-saving investments in India 2026</title>
+    <link>https://epicenterexchange.com/insights/best-tax-saving-investments-india-2026</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/best-tax-saving-investments-india-2026</guid>
+    <pubDate>Sun, 17 May 2026 00:00:00 +0530</pubDate>
+    <category>India</category>
+    <description>ELSS vs PPF vs NPS vs ULIP. The post-tax CAGR table, with the math.</description>
+  </item>
+  <item>
+    <title>Why 89% of day traders lose money</title>
+    <link>https://epicenterexchange.com/insights/why-most-day-traders-lose-data</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/why-most-day-traders-lose-data</guid>
+    <pubDate>Sun, 10 May 2026 00:00:00 +0530</pubDate>
+    <category>Behaviour</category>
+    <description>SEBI's data on 9.5 lakh F&amp;O traders. Why retail intraday is structurally negative-EV.</description>
+  </item>
+  <item>
     <title>SIP vs Lumpsum in India 2026</title>
-    <link>https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026.html</link>
-    <guid isPermaLink="true">https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026.html</guid>
-    <pubDate>Sun, 11 May 2026 00:00:00 +0530</pubDate>
+    <link>https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/sip-vs-lumpsum-india-2026</guid>
+    <pubDate>Sun, 03 May 2026 00:00:00 +0530</pubDate>
     <category>India</category>
     <description>A data-driven look at 25 years of NIFTY data to settle the SIP-vs-lumpsum question for Indian investors.</description>
   </item>
   <item>
     <title>Bitcoin halving cycles, explained</title>
-    <link>https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained.html</link>
-    <guid isPermaLink="true">https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained.html</guid>
-    <pubDate>Sun, 27 Apr 2026 00:00:00 +0530</pubDate>
+    <link>https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/bitcoin-halving-cycles-explained</guid>
+    <pubDate>Sun, 26 Apr 2026 00:00:00 +0530</pubDate>
     <category>Crypto</category>
     <description>Why the four-year halving cycle exists, what the data actually shows, and what it can't predict.</description>
   </item>
   <item>
     <title>XIRR vs CAGR — which one matters?</title>
-    <link>https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters.html</link>
-    <guid isPermaLink="true">https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters.html</guid>
-    <pubDate>Sun, 13 Apr 2026 00:00:00 +0530</pubDate>
+    <link>https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters</link>
+    <guid isPermaLink="true">https://epicenterexchange.com/insights/xirr-vs-cagr-which-matters</guid>
+    <pubDate>Sun, 12 Apr 2026 00:00:00 +0530</pubDate>
     <category>Math</category>
-    <description>Two return numbers, one shows you what you actually earned. Worked examples in INR.</description>
+    <description>Two return numbers, one shows what you actually earned. Worked examples in INR.</description>
   </item>
 </channel>
 </rss>
