@@ -12,15 +12,16 @@ from pydantic import BaseModel, Field
 
 from .db import init_db, log_request, get_cached_prices, set_cached_prices, public_stats
 from .backtest import run_backtest
+from .email_send import config_status as email_config_status
 from .contact import router as contact_router
 from .newsletter import router as newsletter_router
 
-API_VERSION = "1.2.0"
+API_VERSION = "1.3.0"
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
 CRYPTOCOMPARE_BASE = "https://min-api.cryptocompare.com/data/v2"
 YAHOO_BASE = "https://query1.finance.yahoo.com"
 FOREX_BASE = "https://open.er-api.com/v6"
-UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 EpicenterBot/1.2"
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 EpicenterBot/1.3"
 
 ALLOWED_ORIGINS = ["https://epicenterexchange.com", "https://www.epicenterexchange.com"]
 if os.environ.get("ALLOW_LOCALHOST") == "1":
@@ -49,6 +50,12 @@ def health() -> dict:
     return {"status": "ok", "ts": int(time.time())}
 
 
+@app.get("/diag/email")
+def diag_email() -> dict:
+    """Diagnostic: shows whether SMTP env vars are loaded (no secrets exposed)."""
+    return email_config_status()
+
+
 # --- In-memory cache for live data (short TTL) ---
 _mem_cache: dict = {}
 
@@ -63,12 +70,9 @@ def _mset(key: str, value) -> None:
 
 
 # ===== MARKET DATA PROXY ENDPOINTS =====
-# Frontend bypasses CORS by routing through our backend.
-# Yahoo, CoinGecko, CryptoCompare, open.er-api.com all called server-side.
 
 @app.get("/quote")
 def quote(symbols: str) -> dict:
-    """Live quote for one or more Yahoo Finance symbols. Cached 60s."""
     syms = [s.strip() for s in symbols.split(",") if s.strip()][:50]
     if not syms:
         raise HTTPException(400, "no symbols")
@@ -111,7 +115,6 @@ def quote(symbols: str) -> dict:
 
 @app.get("/history")
 def history(symbol: str, range: str = "5y", interval: str = "1d") -> dict:
-    """Historical bars via Yahoo Finance v8 chart. Cached 6 hours."""
     if range not in ("1y","2y","3y","5y","10y","max","1mo","3mo","6mo","ytd"):
         raise HTTPException(400, "invalid range")
     if interval not in ("1d","1wk","1mo"):
@@ -158,7 +161,6 @@ def history(symbol: str, range: str = "5y", interval: str = "1d") -> dict:
 
 @app.get("/crypto/spot")
 def crypto_spot(ids: str) -> dict:
-    """Live spot prices via CoinGecko. Cached 60s."""
     ids_list = [i.strip() for i in ids.split(",") if i.strip()][:30]
     if not ids_list:
         raise HTTPException(400, "no ids")
@@ -180,7 +182,6 @@ def crypto_spot(ids: str) -> dict:
     return {"prices": data, "cached": False}
 
 
-# Map CoinGecko ids -> CryptoCompare symbols.
 _CC_SYM_MAP = {
     "bitcoin": "BTC", "ethereum": "ETH", "solana": "SOL", "ripple": "XRP",
     "binancecoin": "BNB", "cardano": "ADA", "dogecoin": "DOGE",
@@ -195,7 +196,6 @@ _CC_SYM_MAP = {
 
 @app.get("/crypto/history")
 def crypto_history(id: str, days: int = 1825) -> dict:
-    """Historical crypto daily closes via CryptoCompare (free, no key, supports ~2000 days). Cached 24h."""
     sym = _CC_SYM_MAP.get(id.lower(), id.upper())
     days = max(30, min(int(days), 2000))
     key = f"cch:{sym}:{days}"
@@ -226,7 +226,6 @@ def crypto_history(id: str, days: int = 1825) -> dict:
 
 @app.get("/forex")
 def forex(base: str = "USD") -> dict:
-    """Live FX rates from open.er-api.com (free, no key). Cached 1 hour."""
     base = base.upper()[:6]
     key = f"fx:{base}"
     cached = _mget(key, 3600)
@@ -251,7 +250,7 @@ def forex(base: str = "USD") -> dict:
     return {**out, "cached": False}
 
 
-# ===== BACKTEST (uses new robust data sources) =====
+# ===== BACKTEST =====
 
 class BacktestRequest(BaseModel):
     asset: str

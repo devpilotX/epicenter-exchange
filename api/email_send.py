@@ -1,6 +1,6 @@
 """SMTP email sender + HTML templates. Pure stdlib.
 
-Env vars:
+Env vars (loaded automatically from api/.env if present):
   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
   FROM_EMAIL, FROM_NAME                  - default sender
   FROM_EMAIL_CONTACT, FROM_NAME_CONTACT  - used by /contact route
@@ -13,16 +13,47 @@ from email.message import EmailMessage
 from email.policy import SMTPUTF8
 from email.utils import formataddr
 
+# ---- Auto-load .env file BEFORE reading env vars ----
+# Resolves the systemd-doesn't-load-EnvironmentFile problem self-containedly.
+def _load_env_file(path: str) -> bool:
+    if not os.path.exists(path):
+        return False
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, _, v = line.partition("=")
+                k = k.strip()
+                v = v.strip()
+                if len(v) >= 2 and v[0] == v[-1] and v[0] in ('"', "'"):
+                    v = v[1:-1]
+                if k and k not in os.environ:
+                    os.environ[k] = v
+        print(f"[email] loaded .env from {path}")
+        return True
+    except Exception as e:
+        print(f"[email] .env load failed for {path}: {e}")
+        return False
+
+_here = os.path.dirname(os.path.abspath(__file__))
+for _p in (
+    os.path.join(_here, ".env"),
+    "/opt/epicenter-exchange/api/.env",
+    "/etc/epicenter-exchange/.env",
+):
+    if _load_env_file(_p):
+        break
+
 SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.resend.com")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "465"))
 SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASS = os.environ.get("SMTP_PASS", "")
 
-# Default sender (fallback)
 FROM_EMAIL = os.environ.get("FROM_EMAIL", "hello@epicenterexchange.com")
 FROM_NAME = os.environ.get("FROM_NAME", "Epicenter Exchange")
 
-# Per-route senders
 FROM_EMAIL_CONTACT = os.environ.get("FROM_EMAIL_CONTACT", FROM_EMAIL)
 FROM_NAME_CONTACT = os.environ.get("FROM_NAME_CONTACT", FROM_NAME)
 FROM_EMAIL_NEWSLETTER = os.environ.get("FROM_EMAIL_NEWSLETTER", FROM_EMAIL)
@@ -32,14 +63,33 @@ NOTIFY_EMAIL = os.environ.get("NOTIFY_EMAIL", "dipanshu@paisareality.com")
 BRAND_URL = "https://epicenterexchange.com"
 API_URL = os.environ.get("API_URL", "https://api.epicenterexchange.com")
 
+# Startup diagnostics (no secrets printed)
+def config_status() -> dict:
+    return {
+        "smtp_host": SMTP_HOST,
+        "smtp_port": SMTP_PORT,
+        "smtp_user": SMTP_USER if SMTP_USER else "",
+        "smtp_user_set": bool(SMTP_USER),
+        "smtp_pass_set": bool(SMTP_PASS),
+        "smtp_pass_len": len(SMTP_PASS),
+        "from_email_contact": FROM_EMAIL_CONTACT,
+        "from_name_contact": FROM_NAME_CONTACT,
+        "from_email_newsletter": FROM_EMAIL_NEWSLETTER,
+        "from_name_newsletter": FROM_NAME_NEWSLETTER,
+        "notify_email": NOTIFY_EMAIL,
+        "api_url": API_URL,
+    }
+
+print(f"[email] startup config: smtp_host={SMTP_HOST}:{SMTP_PORT} "
+      f"smtp_user={'<set>' if SMTP_USER else 'EMPTY'} "
+      f"smtp_pass={'<set len=' + str(len(SMTP_PASS)) + '>' if SMTP_PASS else 'EMPTY'} "
+      f"contact_from={FROM_EMAIL_CONTACT} newsletter_from={FROM_EMAIL_NEWSLETTER}")
+
 # Strip zero-width / invisible Unicode chars that crash naive SMTP encoders.
-# U+200B ZWSP, U+200C ZWNJ, U+200D ZWJ, U+FEFF BOM, U+2060 word joiner,
-# U+00AD soft hyphen, U+180E mongolian vowel separator.
 _INVISIBLE_RE = re.compile(r"[\u200B\u200C\u200D\uFEFF\u2060\u00AD\u180E]")
 
 
 def _clean(s: str) -> str:
-    """Strip invisible Unicode + normalize line endings."""
     if not s:
         return ""
     return _INVISIBLE_RE.sub("", str(s)).replace("\r\n", "\n")
@@ -48,11 +98,16 @@ def _clean(s: str) -> str:
 def _send(to_email: str, subject: str, html: str, text: str,
           from_email: str | None = None, from_name: str | None = None,
           reply_to: str | None = None) -> None:
+    # FAIL LOUD instead of silently returning. Caller's try/except will catch.
     if not SMTP_USER or not SMTP_PASS:
-        print(f"[email] SMTP not configured, skipping send to {to_email}")
-        return
+        raise RuntimeError(
+            "SMTP credentials missing: SMTP_USER="
+            + ("<set>" if SMTP_USER else "EMPTY")
+            + ", SMTP_PASS="
+            + ("<set>" if SMTP_PASS else "EMPTY")
+            + ". Check /opt/epicenter-exchange/api/.env file and systemd EnvironmentFile."
+        )
 
-    # Sanitize everything that might contain ZWSP or other invisibles
     to_email = _clean(to_email)
     subject = _clean(subject)
     html = _clean(html)
@@ -61,7 +116,6 @@ def _send(to_email: str, subject: str, html: str, text: str,
     from_name = _clean(from_name or FROM_NAME)
     reply_to = _clean(reply_to) if reply_to else None
 
-    # SMTPUTF8 policy: full UTF-8 in headers & body, no ASCII fallback
     msg = EmailMessage(policy=SMTPUTF8)
     msg["From"] = formataddr((from_name, from_email))
     msg["To"] = to_email
@@ -71,23 +125,29 @@ def _send(to_email: str, subject: str, html: str, text: str,
     msg.set_content(text, charset="utf-8")
     msg.add_alternative(html, subtype="html", charset="utf-8")
 
-    # Render to bytes ourselves and use sendmail() — bypasses smtplib's
-    # internal ASCII-encoding pass that triggered the original error.
     raw = msg.as_bytes()
 
     ctx = ssl.create_default_context()
-    if SMTP_PORT == 465:
-        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx) as s:
-            s.ehlo()
-            s.login(SMTP_USER, SMTP_PASS)
-            s.sendmail(from_email, [to_email], raw)
-    else:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
-            s.ehlo()
-            s.starttls(context=ctx)
-            s.ehlo()
-            s.login(SMTP_USER, SMTP_PASS)
-            s.sendmail(from_email, [to_email], raw)
+    try:
+        if SMTP_PORT == 465:
+            with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=15) as s:
+                s.ehlo()
+                s.login(SMTP_USER, SMTP_PASS)
+                s.sendmail(from_email, [to_email], raw)
+        else:
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as s:
+                s.ehlo()
+                s.starttls(context=ctx)
+                s.ehlo()
+                s.login(SMTP_USER, SMTP_PASS)
+                s.sendmail(from_email, [to_email], raw)
+        print(f"[email] sent OK to {to_email} from {from_email}")
+    except smtplib.SMTPAuthenticationError as e:
+        raise RuntimeError(f"SMTP auth failed: {e}") from e
+    except smtplib.SMTPException as e:
+        raise RuntimeError(f"SMTP error: {e}") from e
+    except Exception as e:
+        raise RuntimeError(f"Email send failed: {type(e).__name__}: {e}") from e
 
 
 CSS = "body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#F8FAFC;margin:0;padding:40px 20px;color:#0F172A}.wrap{max-width:600px;margin:0 auto}.hdr{background:#0B1F3A;padding:28px 32px;border-radius:12px 12px 0 0;text-align:center}.hdr h1{color:#C9A227;font-family:Fraunces,Georgia,serif;margin:0;font-size:28px}.hdr p{color:rgba(255,255,255,.7);margin:6px 0 0;font-size:14px}.card{background:#fff;padding:32px;border-radius:0 0 12px 12px}.greet{font-size:22px;color:#C9A227;font-weight:600;margin:0 0 16px}.box{background:#FBF6E1;border-left:4px solid #C9A227;padding:16px 20px;border-radius:8px;margin:24px 0}.box .l{font-size:12px;color:#5b4a08;font-weight:600;text-transform:uppercase;letter-spacing:.05em}.box .v{font-family:IBM Plex Mono,Consolas,monospace;font-size:18px;color:#0B1F3A;font-weight:700;margin:4px 0}.box .h{font-size:13px;color:#C9A227}.wait{background:#F8FAFC;border:1px solid #E2E8F0;padding:20px 24px;border-radius:8px;margin:24px 0}.wait h3{margin:0 0 12px;color:#0B1F3A;font-size:16px}.wait ul{margin:0;padding-left:20px}.wait li{margin:6px 0}.wait a{color:#C9A227;text-decoration:none;font-weight:600}.btn{display:inline-block;background:#C9A227;color:#0B1F3A;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin:8px 0}.foot{text-align:center;padding:24px;color:#64748B;font-size:13px}.foot a{color:#C9A227;text-decoration:none}"
@@ -121,9 +181,9 @@ def send_contact_confirmation(name, email, topic, message, ticket_id):
         "<blockquote style='border-left:3px solid #E2E8F0;padding-left:16px;color:#475569;margin:8px 0'>"
         + msg_preview + "</blockquote>"
         "<div class='wait'><h3>While you wait...</h3><ul>"
-        "<li>Read the <a href='" + BRAND_URL + "/insights.html'>latest insights</a></li>"
-        "<li>Try the <a href='" + BRAND_URL + "/tools.html'>SIP / EMI calculators</a></li>"
-        "<li>Run a <a href='" + BRAND_URL + "/signals.html'>backtest</a></li>"
+        "<li>Read the <a href='" + BRAND_URL + "/insights'>latest insights</a></li>"
+        "<li>Try the <a href='" + BRAND_URL + "/tools'>SIP / EMI calculators</a></li>"
+        "<li>Run a <a href='" + BRAND_URL + "/signals'>backtest</a></li>"
         "</ul></div>"
     )
     text = (
@@ -133,12 +193,10 @@ def send_contact_confirmation(name, email, topic, message, ticket_id):
         "Topic: " + str(topic) + "\n\n"
         "Epicenter Exchange\n" + BRAND_URL
     )
-    # User confirmation
     _send(email, "We received your message - Ticket " + str(ticket_id),
           _wrap(body), text,
           from_email=FROM_EMAIL_CONTACT, from_name=FROM_NAME_CONTACT,
           reply_to=FROM_EMAIL_CONTACT)
-    # Admin notification
     admin = (
         "<p class='greet'>New contact message</p>"
         "<p><strong>From:</strong> " + str(name) + " &lt;" + str(email) + "&gt;<br>"
