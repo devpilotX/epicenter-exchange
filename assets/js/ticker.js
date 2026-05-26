@@ -1,6 +1,6 @@
 /* Epicenter Exchange - live ticker via our backend (no CORS issues).
-   Indices + major stocks via Yahoo (server-side proxy), crypto via CoinGecko.
-   v5 - backed by api.epicenterexchange.com. */
+   Indices + major stocks FIRST (priority), then cryptos.
+   v6 - backed by api.epicenterexchange.com. */
 (function(){
   'use strict';
   var trackEl = document.getElementById('ticker-track');
@@ -15,6 +15,7 @@
     {y:'^DJI',   s:'DOW',     c:'$'},
     {y:'^NSEI',  s:'NIFTY',   c:'\u20B9'},
     {y:'^BSESN', s:'SENSEX',  c:'\u20B9'},
+    {y:'^NSEBANK',s:'BANKNIFTY',c:'\u20B9'},
     {y:'^FTSE',  s:'FTSE',    c:'\u00A3'},
     {y:'^GDAXI', s:'DAX',     c:'\u20AC'},
     {y:'^N225',  s:'NIKKEI',  c:'\u00A5'},
@@ -22,9 +23,13 @@
     {y:'AAPL',   s:'AAPL',    c:'$'},
     {y:'MSFT',   s:'MSFT',    c:'$'},
     {y:'NVDA',   s:'NVDA',    c:'$'},
+    {y:'GOOGL',  s:'GOOGL',   c:'$'},
+    {y:'AMZN',   s:'AMZN',    c:'$'},
+    {y:'TSLA',   s:'TSLA',    c:'$'},
     {y:'RELIANCE.NS', s:'RELI', c:'\u20B9'},
     {y:'TCS.NS',      s:'TCS',  c:'\u20B9'},
-    {y:'HDFCBANK.NS', s:'HDFC', c:'\u20B9'}
+    {y:'HDFCBANK.NS', s:'HDFC', c:'\u20B9'},
+    {y:'INFY.NS',     s:'INFY', c:'\u20B9'}
   ];
   var CRYPTO_IDS = ['bitcoin','ethereum','solana','ripple','binancecoin',
                     'cardano','dogecoin','polkadot','chainlink','avalanche-2'];
@@ -85,11 +90,8 @@
 
   function refresh(){
     Promise.all([fetchEquity(), fetchCrypto()]).then(function(arr){
-      var equity = arr[0], crypto = arr[1], combined = [], max = Math.max(equity.length, crypto.length);
-      for(var i=0;i<max;i++){
-        if(equity[i]) combined.push(equity[i]);
-        if(crypto[i]) combined.push(crypto[i]);
-      }
+      // Indices + major stocks FIRST, then crypto
+      var combined = arr[0].concat(arr[1]);
       renderTrack(combined);
       renderHero(combined);
     });
