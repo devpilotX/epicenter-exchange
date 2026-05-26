@@ -13,8 +13,20 @@ from email.message import EmailMessage
 from email.policy import SMTPUTF8
 from email.utils import formataddr
 
+# Strip zero-width / invisible Unicode chars that crash naive SMTP encoders.
+# U+200B ZWSP, U+200C ZWNJ, U+200D ZWJ, U+FEFF BOM, U+2060 word joiner,
+# U+00AD soft hyphen, U+180E mongolian vowel separator.
+_INVISIBLE_RE = re.compile(r"[\u200B\u200C\u200D\uFEFF\u2060\u00AD\u180E]")
+
+
+def _clean(s) -> str:
+    """Strip invisible Unicode + normalize line endings + trim whitespace."""
+    if s is None:
+        return ""
+    return _INVISIBLE_RE.sub("", str(s)).replace("\r\n", "\n").strip()
+
+
 # ---- Auto-load .env file BEFORE reading env vars ----
-# Resolves the systemd-doesn't-load-EnvironmentFile problem self-containedly.
 def _load_env_file(path: str) -> bool:
     if not os.path.exists(path):
         return False
@@ -46,24 +58,31 @@ for _p in (
     if _load_env_file(_p):
         break
 
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.resend.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "465"))
-SMTP_USER = os.environ.get("SMTP_USER", "")
-SMTP_PASS = os.environ.get("SMTP_PASS", "")
+# ---- IMPORTANT: clean SMTP credentials of invisible Unicode (ZWSP etc.) ----
+# When you copy-paste an API key from a web dashboard, browser rich-text often
+# slips in U+200B (zero-width space). smtplib.login() encodes credentials as
+# ASCII and crashes with: UnicodeEncodeError: 'ascii' codec can't encode '\u200b'.
+SMTP_HOST = _clean(os.environ.get("SMTP_HOST", "smtp.resend.com"))
+_smtp_port_raw = _clean(os.environ.get("SMTP_PORT", "465"))
+SMTP_PORT = int(_smtp_port_raw) if _smtp_port_raw else 465
+SMTP_USER = _clean(os.environ.get("SMTP_USER", ""))
+_raw_pass = os.environ.get("SMTP_PASS", "") or ""
+SMTP_PASS = _clean(_raw_pass)
+_pass_diff = len(_raw_pass) - len(SMTP_PASS)
 
-FROM_EMAIL = os.environ.get("FROM_EMAIL", "hello@epicenterexchange.com")
-FROM_NAME = os.environ.get("FROM_NAME", "Epicenter Exchange")
+FROM_EMAIL = _clean(os.environ.get("FROM_EMAIL", "hello@epicenterexchange.com"))
+FROM_NAME = _clean(os.environ.get("FROM_NAME", "Epicenter Exchange"))
 
-FROM_EMAIL_CONTACT = os.environ.get("FROM_EMAIL_CONTACT", FROM_EMAIL)
-FROM_NAME_CONTACT = os.environ.get("FROM_NAME_CONTACT", FROM_NAME)
-FROM_EMAIL_NEWSLETTER = os.environ.get("FROM_EMAIL_NEWSLETTER", FROM_EMAIL)
-FROM_NAME_NEWSLETTER = os.environ.get("FROM_NAME_NEWSLETTER", FROM_NAME)
+FROM_EMAIL_CONTACT = _clean(os.environ.get("FROM_EMAIL_CONTACT", FROM_EMAIL))
+FROM_NAME_CONTACT = _clean(os.environ.get("FROM_NAME_CONTACT", FROM_NAME))
+FROM_EMAIL_NEWSLETTER = _clean(os.environ.get("FROM_EMAIL_NEWSLETTER", FROM_EMAIL))
+FROM_NAME_NEWSLETTER = _clean(os.environ.get("FROM_NAME_NEWSLETTER", FROM_NAME))
 
-NOTIFY_EMAIL = os.environ.get("NOTIFY_EMAIL", "dipanshu@paisareality.com")
+NOTIFY_EMAIL = _clean(os.environ.get("NOTIFY_EMAIL", "dipanshu@paisareality.com"))
 BRAND_URL = "https://epicenterexchange.com"
-API_URL = os.environ.get("API_URL", "https://api.epicenterexchange.com")
+API_URL = _clean(os.environ.get("API_URL", "https://api.epicenterexchange.com"))
 
-# Startup diagnostics (no secrets printed)
+
 def config_status() -> dict:
     return {
         "smtp_host": SMTP_HOST,
@@ -72,6 +91,8 @@ def config_status() -> dict:
         "smtp_user_set": bool(SMTP_USER),
         "smtp_pass_set": bool(SMTP_PASS),
         "smtp_pass_len": len(SMTP_PASS),
+        "smtp_pass_raw_len": len(_raw_pass),
+        "smtp_pass_invisible_chars_stripped": _pass_diff,
         "from_email_contact": FROM_EMAIL_CONTACT,
         "from_name_contact": FROM_NAME_CONTACT,
         "from_email_newsletter": FROM_EMAIL_NEWSLETTER,
@@ -81,37 +102,28 @@ def config_status() -> dict:
     }
 
 print(f"[email] startup config: smtp_host={SMTP_HOST}:{SMTP_PORT} "
-      f"smtp_user={'<set>' if SMTP_USER else 'EMPTY'} "
+      f"smtp_user={'<set len=' + str(len(SMTP_USER)) + '>' if SMTP_USER else 'EMPTY'} "
       f"smtp_pass={'<set len=' + str(len(SMTP_PASS)) + '>' if SMTP_PASS else 'EMPTY'} "
+      f"invisibles_stripped_from_pass={_pass_diff} "
       f"contact_from={FROM_EMAIL_CONTACT} newsletter_from={FROM_EMAIL_NEWSLETTER}")
-
-# Strip zero-width / invisible Unicode chars that crash naive SMTP encoders.
-_INVISIBLE_RE = re.compile(r"[\u200B\u200C\u200D\uFEFF\u2060\u00AD\u180E]")
-
-
-def _clean(s: str) -> str:
-    if not s:
-        return ""
-    return _INVISIBLE_RE.sub("", str(s)).replace("\r\n", "\n")
 
 
 def _send(to_email: str, subject: str, html: str, text: str,
           from_email: str | None = None, from_name: str | None = None,
           reply_to: str | None = None) -> None:
-    # FAIL LOUD instead of silently returning. Caller's try/except will catch.
     if not SMTP_USER or not SMTP_PASS:
         raise RuntimeError(
             "SMTP credentials missing: SMTP_USER="
             + ("<set>" if SMTP_USER else "EMPTY")
             + ", SMTP_PASS="
             + ("<set>" if SMTP_PASS else "EMPTY")
-            + ". Check /opt/epicenter-exchange/api/.env file and systemd EnvironmentFile."
+            + ". Check /opt/epicenter-exchange/api/.env"
         )
 
     to_email = _clean(to_email)
     subject = _clean(subject)
-    html = _clean(html)
-    text = _clean(text)
+    html = _INVISIBLE_RE.sub("", str(html)).replace("\r\n", "\n")  # don't strip leading/trailing for HTML
+    text = _INVISIBLE_RE.sub("", str(text)).replace("\r\n", "\n")
     from_email = _clean(from_email or FROM_EMAIL)
     from_name = _clean(from_name or FROM_NAME)
     reply_to = _clean(reply_to) if reply_to else None
@@ -146,6 +158,10 @@ def _send(to_email: str, subject: str, html: str, text: str,
         raise RuntimeError(f"SMTP auth failed: {e}") from e
     except smtplib.SMTPException as e:
         raise RuntimeError(f"SMTP error: {e}") from e
+    except UnicodeEncodeError as e:
+        # If this still triggers, something invisible is in a header/body we didn't catch.
+        raise RuntimeError(f"Unicode in SMTP frame: {e}. "
+                           f"Check from={from_email!r} to={to_email!r} subject={subject!r}") from e
     except Exception as e:
         raise RuntimeError(f"Email send failed: {type(e).__name__}: {e}") from e
 
